@@ -63,7 +63,7 @@
     inset:0;
     width:100%;
     height:100%;
-    background: url('stadium_bg.jpg') center 42% / cover no-repeat;
+    background: url('/stadium_bg.jpg') center 42% / cover no-repeat, url('stadium_bg.jpg') center 42% / cover no-repeat;
     transform-origin:50% 50%;
     will-change:transform;
     animation: slowZoom 24s ease-in-out infinite alternate;
@@ -392,7 +392,7 @@
 <!-- ===================== GLOBAL CRICKET GROUND BACKGROUND ===================== -->
 <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
   <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000"
-       style="background-image: url('stadium_bg.jpg'); filter: brightness(0.40) contrast(1.15) saturate(1.25);"></div>
+       style="background-image: url('/stadium_bg.jpg'), url('stadium_bg.jpg'); filter: brightness(0.55) contrast(1.15) saturate(1.25);"></div>
   <div class="absolute inset-0 bg-gradient-to-b from-[#06080f]/80 via-[#06080f]/50 to-[#06080f]/95"></div>
   <div class="absolute inset-0" style="background: radial-gradient(ellipse 110% 90% at 50% 35%, transparent 20%, rgba(6,8,15,0.7) 65%, rgba(6,8,15,0.95) 100%);"></div>
 </div>
