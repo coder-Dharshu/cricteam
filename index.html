@@ -53,47 +53,39 @@
   }
   .font-display{ font-family:'Anton',sans-serif; letter-spacing:0.01em; }
 
-  .bg-stage{ background: var(--ink); }
+  .bg-stage{ background: transparent !important; }
 
   /* ============ HERO STADIUM PHOTO ============ */
-  .hero-scene{ position:absolute; inset:0; overflow:hidden; }
+  .hero-scene{ position:absolute; inset:0; overflow:hidden; z-index:0; }
 
   .stadium-photo-hero{
     position:absolute;
-    bottom:0; left:0; right:0;
-    height:68%;
-    background: url('/stadium_bg.jpg') center 40% / cover no-repeat;
-    transform-origin:50% 100%;
+    inset:0;
+    width:100%;
+    height:100%;
+    background: url('stadium_bg.jpg') center 42% / cover no-repeat;
+    transform-origin:50% 50%;
     will-change:transform;
     animation: slowZoom 24s ease-in-out infinite alternate;
   }
-  @keyframes slowZoom{ from{transform:scale(1.0);} to{transform:scale(1.06) translateY(-6px);} }
+  @keyframes slowZoom{ from{transform:scale(1.0);} to{transform:scale(1.08) translateY(-8px);} }
 
-  /* Navy fade at top edge of photo */
+  /* Vignette & balanced lighting so hero content pops */
   .stadium-photo-hero::before{
     content:''; position:absolute; inset:0;
-    background: linear-gradient(180deg, var(--ink) 0%, rgba(6,8,15,0.0) 50%);
+    background: radial-gradient(ellipse 110% 90% at 50% 45%, rgba(6,8,15,0.15) 0%, rgba(6,8,15,0.60) 70%, rgba(6,8,15,0.92) 100%);
   }
-  /* Side + bottom vignette */
   .stadium-photo-hero::after{
     content:''; position:absolute; inset:0;
     background:
-      radial-gradient(ellipse 120% 100% at 50% 100%, transparent 40%, rgba(6,8,15,0.88) 100%),
-      linear-gradient(90deg, rgba(6,8,15,0.7) 0%, transparent 20%, transparent 80%, rgba(6,8,15,0.7) 100%),
-      linear-gradient(0deg, var(--ink) 0%, transparent 20%);
+      linear-gradient(180deg, rgba(6,8,15,0.82) 0%, rgba(6,8,15,0.10) 35%, rgba(6,8,15,0.60) 75%, rgba(6,8,15,0.96) 100%);
   }
-  /* Dark navy sky for text zone */
-  .hero-dark-sky{
-    position:absolute; top:0; left:0; right:0; height:42%;
-    background: linear-gradient(180deg, rgba(6,8,15,0.99) 0%, rgba(6,8,15,0.94) 55%, rgba(6,8,15,0.0) 100%);
-    pointer-events:none;
-  }
-  /* Blue atmospheric glow at horizon */
+  /* Subtle horizon glow */
   .hero-ember-horizon{
     position:absolute; left:50%; top:54%; transform:translateX(-50%);
     width:100%; height:200px;
     background: radial-gradient(ellipse 80% 100% at 50% 50%,
-      rgba(59,130,246,0.22) 0%, rgba(96,165,250,0.06) 45%, transparent 70%);
+      rgba(59,130,246,0.20) 0%, rgba(96,165,250,0.05) 45%, transparent 70%);
     pointer-events:none;
     animation: horizonPulse 5s ease-in-out infinite;
   }
@@ -104,7 +96,7 @@
     position:absolute; inset:0; pointer-events:none; z-index:1;
     background-image: repeating-linear-gradient(
       180deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 3px,
-      rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px);
+      rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
   }
 
   /* ============ HERO TEXT ============ */
@@ -223,13 +215,14 @@
   }
   .btn-ghost:active{ transform:translateY(0); }
 
-  /* Card base — clean dark, crisp border, drop shadow only (no inner glow) */
+  /* Card base — clean dark glass, letting stadium glow through slightly */
   .card-texture{
-    background: linear-gradient(160deg, #111827 0%, #0d1424 100%);
+    background: linear-gradient(160deg, rgba(17,24,39,0.85) 0%, rgba(13,20,36,0.92) 100%);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     box-shadow:
-      0 1px 0 rgba(255,255,255,0.06) inset,
-      0 16px 40px -10px rgba(0,0,0,0.9),
-      0 4px 12px rgba(0,0,0,0.6);
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 20px 50px -10px rgba(0,0,0,0.9),
+      0 0 40px -15px rgba(59,130,246,0.25);
   }
 
   /* Glass utility — navy dark glass, clean */
@@ -247,7 +240,7 @@
   }
 
   /* ============ LEGACY / SHARED ============ */
-  .bg-stage{ background: var(--ink); }
+  .bg-stage{ background: transparent !important; }
   .marquee-mask{
     -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
     mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
@@ -394,7 +387,15 @@
 
 </head>
 
-<body class="min-h-screen">
+<body class="min-h-screen text-cream relative">
+
+<!-- ===================== GLOBAL CRICKET GROUND BACKGROUND ===================== -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+  <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000"
+       style="background-image: url('stadium_bg.jpg'); filter: brightness(0.40) contrast(1.15) saturate(1.25);"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-[#06080f]/80 via-[#06080f]/50 to-[#06080f]/95"></div>
+  <div class="absolute inset-0" style="background: radial-gradient(ellipse 110% 90% at 50% 35%, transparent 20%, rgba(6,8,15,0.7) 65%, rgba(6,8,15,0.95) 100%);"></div>
+</div>
 
 <!-- ===================== NAV ===================== -->
 <nav class="fixed top-0 left-0 w-full z-50 glass-strong" style="padding-top:env(safe-area-inset-top,0px);">
@@ -630,7 +631,6 @@
 <!-- ===================== PLAYER REGISTRATION ===================== -->
 <section id="view-register" class="view">
   <div class="relative min-h-screen bg-stage flex items-center justify-center px-4 py-28 overflow-hidden">
-    <div class="stadium-wrap opacity-25" style="height:55vh;"><div class="stadium-3d" id="stadium-reg"></div></div>
 
     <div class="relative z-10 w-full max-w-lg" style="perspective:1200px;">
       <div id="reg-card" class="card-texture border border-[var(--line)] rounded-2xl p-6 sm:p-9 backdrop-blur-sm tilt" style="transform-style:preserve-3d;">
@@ -686,7 +686,6 @@
 <!-- ===================== PLAYER SUCCESS ===================== -->
 <section id="view-success" class="view">
   <div class="relative min-h-screen bg-stage flex items-center justify-center px-6 overflow-hidden">
-    <div class="stadium-wrap opacity-20" style="height:55vh;"><div class="stadium-3d" id="stadium-success"></div></div>
     <div class="relative z-10 text-center max-w-md">
       <div id="success-icon" class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:radial-gradient(circle, rgba(61,138,46,0.28), rgba(61,138,46,0.05)); border:2px solid rgba(143,224,122,0.5);">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8fe07a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
@@ -726,7 +725,6 @@
 <!-- ===================== TEAM REGISTRATION ===================== -->
 <section id="view-team-register" class="view">
   <div class="relative min-h-screen bg-stage flex items-center justify-center px-4 py-28 overflow-hidden">
-    <div class="stadium-wrap opacity-25" style="height:55vh;"><div class="stadium-3d" id="stadium-team"></div></div>
 
     <div class="relative z-10 w-full max-w-lg" style="perspective:1200px;">
       <div id="team-card" class="card-texture border border-[var(--line)] rounded-2xl p-6 sm:p-9 backdrop-blur-sm tilt" style="transform-style:preserve-3d;">
@@ -793,7 +791,6 @@
 <!-- ===================== TEAM SUCCESS ===================== -->
 <section id="view-team-success" class="view">
   <div class="relative min-h-screen bg-stage flex items-center justify-center px-6 overflow-hidden">
-    <div class="stadium-wrap opacity-20" style="height:55vh;"><div class="stadium-3d" id="stadium-team-success"></div></div>
     <div class="relative z-10 text-center max-w-md">
       <div id="team-success-icon" class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:radial-gradient(circle, rgba(61,138,46,0.28), rgba(61,138,46,0.05)); border:2px solid rgba(143,224,122,0.5);">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8fe07a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
