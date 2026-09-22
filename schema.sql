@@ -50,3 +50,7 @@ CREATE POLICY "Allow public insert players" ON public.players FOR INSERT WITH CH
 
 DROP POLICY IF EXISTS "Allow public update teams" ON public.teams;
 CREATE POLICY "Allow public update teams" ON public.teams FOR UPDATE USING (true) WITH CHECK (true);
+
+-- 6. Fresh Start / Wipe All Data (Optional)
+-- Run this single line in Supabase SQL Editor whenever you want to wipe all test registrations and start fresh:
+-- TRUNCATE TABLE public.players, public.teams CASCADE;

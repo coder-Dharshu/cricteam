@@ -213,6 +213,23 @@ app.post('/api/admin/login', (req, res) => {
   }
 });
 
+// Admin Reset All Data
+app.post('/api/admin/reset', async (req, res) => {
+  const { pin } = req.body;
+  if (pin !== ADMIN_PIN) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid admin PIN' });
+  }
+  try {
+    const result = await db.resetAllData();
+    const stats = await db.getStats();
+    broadcastEvent('data_reset', { stats });
+    res.json({ success: true, message: result.message, stats });
+  } catch (err) {
+    console.error('Data reset error:', err);
+    res.status(500).json({ error: 'Failed to reset tournament data' });
+  }
+});
+
 // Fallback to index.html for single page navigation
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {

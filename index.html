@@ -548,7 +548,7 @@
             <!-- Stat bar -->
             <div class="animate-fade-up delay-300 grid grid-cols-4 gap-1.5 sm:gap-6 bg-black/40 sm:bg-transparent p-2.5 sm:p-0 rounded-xl border border-white/5 sm:border-0 backdrop-blur-sm sm:backdrop-blur-none max-w-sm sm:max-w-none">
               <div class="text-center">
-                <div class="font-display text-xl sm:text-3xl text-cream hero-title-shadow" id="hero-stat-teams">4</div>
+                <div class="font-display text-xl sm:text-3xl text-cream hero-title-shadow" id="hero-stat-teams">0</div>
                 <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.12em] text-cream/45 mt-0.5">Teams</div>
               </div>
               <div class="text-center">
@@ -597,7 +597,7 @@
           style="box-shadow:0 0 0 1px rgba(251,191,36,0.10) inset, 0 8px 28px -8px rgba(0,0,0,0.8), 0 0 30px -12px rgba(251,191,36,0.20);">
           <div class="step-num text-4xl mb-2">02</div>
           <h3 class="font-display text-xl uppercase text-white mb-1">Team Registration</h3>
-          <p class="text-cream/50 text-xs font-medium leading-relaxed mb-4">Register your team, assign captain, home ground, and team squad members.</p>
+          <p class="text-cream/50 text-xs font-medium leading-relaxed mb-4">Register your team, assign captain, and team squad members.</p>
           <button onclick="showView('team-register')" class="text-xs font-bold text-[var(--gold)] hover:underline uppercase tracking-wider">Register Team &rarr;</button>
         </div>
       </div>
@@ -669,7 +669,7 @@
               <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50">Your Team <span class="text-cream/35 text-[10px] lowercase font-normal">(Optional)</span></label>
               <span class="text-[10px] text-[var(--gold)] font-bold">Select or type team</span>
             </div>
-            <input id="f-team" list="teams-datalist" type="text" placeholder="e.g. Honganuru Strikers (or leave blank)"
+            <input id="f-team" list="teams-datalist" type="text" placeholder="Enter team name (or leave blank for open pool)"
               class="field-input w-full rounded-lg px-4 py-3 text-cream font-medium placeholder:text-cream/25">
             <datalist id="teams-datalist"></datalist>
             <p class="text-[10px] text-cream/40 mt-1">Belong to a team? Enter their name to join their roster. Leave blank to enter the open player pool.</p>
@@ -759,7 +759,7 @@
         <form id="team-form" class="space-y-4 sm:space-y-5" onsubmit="return handleTeamRegister(event)">
           <div>
             <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5 sm:mb-2">Team Name</label>
-            <input id="t-name" type="text" required placeholder="e.g. Honganuru Strikers"
+            <input id="t-name" type="text" required placeholder="Enter team name (e.g. Royal Warriors XI)"
               class="field-input w-full rounded-lg px-4 py-3 text-cream font-medium placeholder:text-cream/25">
           </div>
 
@@ -862,6 +862,7 @@
           <h1 class="font-display text-2xl sm:text-4xl uppercase text-cream tracking-wide">HPL Season 2 &ndash; Management</h1>
         </div>
         <div class="flex items-center gap-2">
+          <button onclick="confirmResetTournamentData()" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.12em] text-red-400 hover:text-white border border-red-500/30 hover:bg-red-500/20 rounded-lg px-3 py-1.5 transition-colors">Wipe &amp; Restart</button>
           <button onclick="showView('welcome')" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--blue-light)] border border-[var(--blue)]/30 rounded-lg px-3 py-1.5 hover:bg-[var(--blue)]/10 transition-colors">Home Page</button>
           <button onclick="logoutAdmin()" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-cream/40 hover:text-red-300 border border-[var(--line)] rounded-lg px-3 py-1.5 transition-colors">Logout</button>
         </div>
@@ -1001,8 +1002,12 @@
     { id:'extra', label:'Extra Player', icon:'👤', badge:'badge-extra' },
   ];
   const ADMIN_PIN = "HPL2026";
-  const STORAGE_KEY_PLAYERS = "hpl_season2_players";
-  const STORAGE_KEY_TEAMS = "hpl_season2_teams";
+  const STORAGE_KEY_PLAYERS = "hpl_season2_fresh_players";
+  const STORAGE_KEY_TEAMS = "hpl_season2_fresh_teams";
+  try {
+    localStorage.removeItem("hpl_season2_players");
+    localStorage.removeItem("hpl_season2_teams");
+  } catch(e) {}
 
   let currentView = 'welcome';
   let lastRegisteredPlayer = null;
@@ -1491,6 +1496,36 @@
   }
 
   function logoutAdmin(){ showView('welcome'); }
+
+  async function confirmResetTournamentData() {
+    const confirmation = prompt("⚠️ DANGER: Wipe all teams and players?\nType 'RESET' to confirm:");
+    if (confirmation !== 'RESET') return;
+
+    try {
+      const res = await fetch('/api/admin/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: ADMIN_PIN })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Reset failed');
+
+      try {
+        localStorage.removeItem(STORAGE_KEY_PLAYERS);
+        localStorage.removeItem(STORAGE_KEY_TEAMS);
+      } catch(e) {}
+      cachedPlayers = [];
+      cachedTeams = [];
+
+      alert('All tournament registrations have been wiped! Starting fresh from now.');
+      renderAdminStats();
+      renderTable();
+      renderTeamsAdmin();
+      refreshHeroStats();
+    } catch(err) {
+      alert('Reset failed: ' + err.message);
+    }
+  }
 
   function switchAdminTab(tab){
     document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));

@@ -429,6 +429,20 @@ const dbAdapter = {
       totalTeams: teams.length,
       database: supabase ? 'supabase-postgres' : 'local-json'
     };
+  },
+
+  // ===== RESET / CLEAR ALL DATA =====
+  async resetAllData() {
+    if (supabase) {
+      try {
+        await supabase.from('players').delete().neq('id', '');
+        await supabase.from('teams').delete().neq('id', '');
+      } catch (err) {
+        console.error('Supabase resetAllData error:', err.message);
+      }
+    }
+    writeLocalDb({ players: [], teams: [] });
+    return { success: true, message: 'All tournament player and team data has been reset.' };
   }
 };
 
