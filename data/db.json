@@ -139,6 +139,17 @@
         "Praveen"
       ],
       "registeredAt": "2026-09-22T14:57:56.794Z"
+    },
+    {
+      "id": "t-1790089270354",
+      "name": "bengaluru",
+      "captain": "dharshu",
+      "mobile": "9849946546",
+      "ground": "",
+      "players": [
+        "dharshu"
+      ],
+      "registeredAt": "2026-09-22T15:01:10.354Z"
     }
   ],
   "matches": [
