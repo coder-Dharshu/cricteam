@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="ballShade" cx="35%" cy="30%" r="68%">
+      <stop offset="0%" stop-color="#ff4d4d"/>
+      <stop offset="30%" stop-color="#e11d48"/>
+      <stop offset="70%" stop-color="#9f1239"/>
+      <stop offset="100%" stop-color="#4c0519"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Cricket Ball Sphere -->
+  <circle cx="32" cy="32" r="28" fill="url(#ballShade)" filter="url(#shadow)"/>
+  
+  <!-- Subtle specular highlight -->
+  <path d="M 14 20 A 20 20 0 0 1 34 10" stroke="#fda4af" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.45"/>
+
+  <!-- Seam Channel (curved slightly for 3D realism) -->
+  <path d="M 4 32 Q 32 35 60 32" stroke="#881337" stroke-width="5" fill="none"/>
+  <path d="M 4 32 Q 32 35 60 32" stroke="#fff1f2" stroke-width="2" fill="none"/>
+
+  <!-- Crisp Cross-Stitch Seam Threads -->
+  <g stroke="#ffffff" stroke-width="1.6" stroke-linecap="round">
+    <line x1="8" y1="28.5" x2="11" y2="33.5" />
+    <line x1="11" y1="33.5" x2="13" y2="36.5" />
+    <line x1="15" y1="28.5" x2="18" y2="34" />
+    <line x1="18" y1="34" x2="20" y2="37" />
+    <line x1="22" y1="28.5" x2="25" y2="34.5" />
+    <line x1="25" y1="34.5" x2="27" y2="37.5" />
+    <line x1="29" y1="29" x2="32" y2="35" />
+    <line x1="32" y1="35" x2="34" y2="38" />
+    <line x1="36" y1="29" x2="39" y2="35" />
+    <line x1="39" y1="35" x2="41" y2="38" />
+    <line x1="43" y1="28.5" x2="46" y2="34.5" />
+    <line x1="46" y1="34.5" x2="48" y2="37.5" />
+    <line x1="50" y1="28.5" x2="53" y2="34" />
+    <line x1="53" y1="34" x2="55" y2="37" />
+  </g>
+</svg>
