@@ -297,19 +297,27 @@
 
   /* ============ FORM INPUTS ============ */
   .field-input{
-    background:rgba(15,22,41,0.6);
-    border:1px solid rgba(59,130,246,0.22);
+    background:rgba(15,22,41,0.7);
+    border:1px solid rgba(59,130,246,0.25);
     color:var(--cream);
+    font-size:16px; /* Prevents auto-zoom on mobile iOS Safari */
     transition:all .2s ease;
   }
   .field-input:focus{
     outline:none;
     border-color:var(--blue-light);
-    background:rgba(15,22,41,0.8);
+    background:rgba(15,22,41,0.85);
     box-shadow:0 0 0 3px rgba(59,130,246,0.25), 0 0 20px -6px rgba(59,130,246,0.4);
   }
   .field-input::placeholder{ color:rgba(224,232,255,0.30); }
   select.field-input option{ background:#0f1629; color:var(--cream); }
+
+  @media (max-width: 640px){
+    .field-input{ font-size:16px !important; }
+    .hero-title{ font-size:clamp(2.3rem, 10.5vw, 4.2rem) !important; line-height:0.96 !important; }
+    .stat-card{ padding:0.75rem 0.6rem !important; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+  }
 
   /* ============ BADGES ============ */
   .badge{ font-family:'Inter',sans-serif; font-weight:800; font-size:10px; letter-spacing:0.08em; padding:4px 10px; border-radius:999px; text-transform:uppercase; }
@@ -399,23 +407,23 @@
 
 <!-- ===================== NAV ===================== -->
 <nav class="fixed top-0 left-0 w-full z-50 glass-strong" style="padding-top:env(safe-area-inset-top,0px);">
-  <div class="max-w-6xl mx-auto px-5 py-3.5 flex items-center justify-between">
-    <button onclick="showView('welcome')" class="flex items-center gap-2.5">
-      <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+  <div class="max-w-6xl mx-auto px-3.5 sm:px-5 py-2.5 sm:py-3.5 flex items-center justify-between">
+    <button onclick="showView('welcome')" class="flex items-center gap-2">
+      <svg width="30" height="30" viewBox="0 0 40 40" fill="none" class="shrink-0">
         <circle cx="20" cy="20" r="18" fill="url(#ballGrad)"/>
         <path d="M20 4 A16 16 0 0 1 20 36" stroke="#3a0f02" stroke-width="1.4" stroke-dasharray="3 3" fill="none"/>
         <path d="M20 4 A16 16 0 0 0 20 36" stroke="#3a0f02" stroke-width="1.4" stroke-dasharray="3 3" fill="none"/>
         <defs><radialGradient id="ballGrad" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#93c5fd"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></radialGradient></defs>
       </svg>
       <div class="leading-none text-left">
-        <div class="font-display text-lg tracking-wide text-cream">HPL</div>
-        <div class="text-[9px] font-bold tracking-[0.2em] text-[var(--blue-light)] -mt-0.5">HONGANURU</div>
+        <div class="font-display text-base sm:text-lg tracking-wide text-cream">HPL</div>
+        <div class="text-[8px] sm:text-[9px] font-bold tracking-[0.18em] text-[var(--blue-light)] -mt-0.5">HONGANURU</div>
       </div>
     </button>
-    <div class="flex items-center gap-3 sm:gap-5">
-      <button onclick="showView('register')" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-cream/60 hover:text-[var(--blue-light)] transition-colors">Player Reg</button>
-      <button onclick="showView('team-register')" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-cream/60 hover:text-[var(--blue-light)] transition-colors">Team Reg</button>
-      <button onclick="openAdminGate()" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-cream/35 hover:text-cream transition-colors">Admin</button>
+    <div class="flex items-center gap-1 sm:gap-4">
+      <button onclick="showView('register')" class="text-[11px] sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-[0.15em] px-2 sm:px-2.5 py-1.5 rounded-lg text-cream/75 hover:text-white hover:bg-white/5 transition-all">Player Reg</button>
+      <button onclick="showView('team-register')" class="text-[11px] sm:text-xs font-bold uppercase tracking-[0.08em] sm:tracking-[0.15em] px-2 sm:px-2.5 py-1.5 rounded-lg text-cream/75 hover:text-white hover:bg-white/5 transition-all">Team Reg</button>
+      <button onclick="openAdminGate()" class="text-[10px] sm:text-xs font-extrabold uppercase tracking-[0.1em] sm:tracking-[0.15em] px-2.5 py-1.5 rounded-lg text-[var(--gold)] hover:bg-[var(--gold)]/10 transition-all border border-[var(--gold)]/30">Admin</button>
     </div>
   </div>
 </nav>
@@ -503,60 +511,57 @@
     <div class="relative z-10 flex flex-col min-h-screen">
 
       <!-- HERO CENTER CONTENT -->
-      <div class="flex-1 flex items-center pt-24">
-        <div class="max-w-6xl mx-auto w-full px-6 py-10">
+      <div class="flex-1 flex items-center pt-20 sm:pt-24 pb-8">
+        <div class="max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-10">
           <div class="max-w-2xl">
 
             <!-- Season badge -->
-            <div id="hero-badge" class="animate-fade-up inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-5"
+            <div id="hero-badge" class="animate-fade-up inline-flex items-center gap-2 rounded-full px-3.5 py-1 mb-4 sm:mb-5"
               style="background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.50); box-shadow:0 0 18px -4px rgba(59,130,246,0.4);">
               <span class="w-2 h-2 rounded-full bg-[var(--blue)] animate-pulse"></span>
-              <span class="text-[11px] font-extrabold tracking-[0.25em] text-[var(--blue-light)] uppercase">Season 2 &middot; Registrations Open</span>
+              <span class="text-[10px] sm:text-[11px] font-extrabold tracking-[0.2em] text-[var(--blue-light)] uppercase">Season 2 &middot; Registrations Open</span>
             </div>
 
             <!-- Main heading with text-panel backing -->
-            <div class="hero-text-panel p-6 sm:p-8 mb-6 animate-fade-up delay-100">
-              <h1 id="hero-title" class="hero-title font-display text-5xl sm:text-6xl md:text-[5.5rem] leading-[0.90] uppercase text-white hero-title-shadow">
+            <div class="hero-text-panel p-4 sm:p-8 mb-5 sm:mb-6 animate-fade-up delay-100">
+              <h1 id="hero-title" class="hero-title font-display text-4xl sm:text-6xl md:text-[5.5rem] leading-[0.95] sm:leading-[0.90] uppercase text-white hero-title-shadow">
                 Honganuru<br>
                 <span class="gradient-text">Premier League</span>
               </h1>
-              <p id="hero-sub" class="mt-5 text-cream/80 text-sm sm:text-base max-w-lg font-medium leading-relaxed hero-sub-shadow">
+              <p id="hero-sub" class="mt-3 sm:mt-5 text-cream/80 text-xs sm:text-base max-w-lg font-medium leading-relaxed hero-sub-shadow">
                 Step up to the crease. Register yourself &amp; your team for Season 2 &mdash; batters, bowlers, keepers, all-rounders welcome.
               </p>
             </div>
 
             <!-- CTAs — Player & Team Registration -->
-            <div id="hero-cta" class="animate-fade-up delay-200 flex flex-wrap gap-3 mb-8">
-              <button onclick="showView('register')" class="btn-ember font-extrabold text-sm uppercase tracking-[0.15em] px-7 py-3.5 rounded-xl flex items-center gap-2">
+            <div id="hero-cta" class="animate-fade-up delay-200 flex flex-col sm:flex-row gap-2.5 sm:gap-3 mb-6 sm:mb-8">
+              <button onclick="showView('register')" class="btn-ember font-extrabold text-xs sm:text-sm uppercase tracking-[0.15em] px-6 py-3.5 rounded-xl flex items-center justify-center gap-2 w-full sm:w-auto">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-5.33 0-8 2.67-8 4v1h16v-1c0-1.33-2.67-4-8-4z"/></svg>
-                Register Player
+                <span>Register Player</span>
               </button>
-              <button onclick="showView('team-register')" class="btn-ghost font-extrabold text-sm uppercase tracking-[0.15em] px-7 py-3.5 rounded-xl flex items-center gap-2">
+              <button onclick="showView('team-register')" class="btn-ghost font-extrabold text-xs sm:text-sm uppercase tracking-[0.15em] px-6 py-3.5 rounded-xl flex items-center justify-center gap-2 w-full sm:w-auto">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                Register Team
+                <span>Register Team</span>
               </button>
             </div>
 
             <!-- Stat bar -->
-            <div class="animate-fade-up delay-300 flex items-center gap-5 sm:gap-8">
+            <div class="animate-fade-up delay-300 grid grid-cols-4 gap-1.5 sm:gap-6 bg-black/40 sm:bg-transparent p-2.5 sm:p-0 rounded-xl border border-white/5 sm:border-0 backdrop-blur-sm sm:backdrop-blur-none max-w-sm sm:max-w-none">
               <div class="text-center">
-                <div class="font-display text-2xl sm:text-3xl text-cream hero-title-shadow" id="hero-stat-teams">4</div>
-                <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/45 mt-0.5">Teams</div>
+                <div class="font-display text-xl sm:text-3xl text-cream hero-title-shadow" id="hero-stat-teams">4</div>
+                <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.12em] text-cream/45 mt-0.5">Teams</div>
               </div>
-              <div class="stat-sep"></div>
               <div class="text-center">
-                <div class="font-display text-2xl sm:text-3xl text-cream hero-title-shadow" id="hero-stat-players">0</div>
-                <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/45 mt-0.5">Players</div>
+                <div class="font-display text-xl sm:text-3xl text-cream hero-title-shadow" id="hero-stat-players">0</div>
+                <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.12em] text-cream/45 mt-0.5">Players</div>
               </div>
-              <div class="stat-sep"></div>
               <div class="text-center">
-                <div class="font-display text-2xl sm:text-3xl text-[var(--gold)] hero-title-shadow">T20</div>
-                <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/45 mt-0.5">Format</div>
+                <div class="font-display text-xl sm:text-3xl text-[var(--gold)] hero-title-shadow">T20</div>
+                <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.12em] text-cream/45 mt-0.5">Format</div>
               </div>
-              <div class="stat-sep"></div>
               <div class="text-center">
-                <div class="font-display text-2xl sm:text-3xl text-[var(--blue-light)] hero-title-shadow">Free</div>
-                <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/45 mt-0.5">To Join</div>
+                <div class="font-display text-xl sm:text-3xl text-[var(--blue-light)] hero-title-shadow">Free</div>
+                <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.12em] text-cream/45 mt-0.5">Entry</div>
               </div>
             </div>
           </div>
@@ -630,51 +635,62 @@
 
 <!-- ===================== PLAYER REGISTRATION ===================== -->
 <section id="view-register" class="view">
-  <div class="relative min-h-screen bg-stage flex items-center justify-center px-4 py-28 overflow-hidden">
+  <div class="relative min-h-screen bg-stage flex items-center justify-center px-3 sm:px-4 py-20 sm:py-28 overflow-hidden">
 
     <div class="relative z-10 w-full max-w-lg" style="perspective:1200px;">
-      <div id="reg-card" class="card-texture border border-[var(--line)] rounded-2xl p-6 sm:p-9 backdrop-blur-sm tilt" style="transform-style:preserve-3d;">
+      <div id="reg-card" class="card-texture border border-[var(--line)] rounded-2xl p-4 sm:p-9 backdrop-blur-sm tilt" style="transform-style:preserve-3d;">
 
-        <div class="text-center mb-7">
-          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-[var(--ember)]/12 border border-[var(--ember)]/30 flex items-center justify-center">
-            <svg width="26" height="26" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="url(#ballGrad2)"/><path d="M10 1 A9 9 0 0 1 10 19" stroke="#1d4ed8" stroke-width="0.9" stroke-dasharray="2 2" fill="none"/><defs><radialGradient id="ballGrad2" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#93c5fd"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></radialGradient></defs></svg>
+        <div class="text-center mb-5 sm:mb-7">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-full bg-[var(--ember)]/12 border border-[var(--ember)]/30 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="url(#ballGrad2)"/><path d="M10 1 A9 9 0 0 1 10 19" stroke="#1d4ed8" stroke-width="0.9" stroke-dasharray="2 2" fill="none"/><defs><radialGradient id="ballGrad2" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#93c5fd"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></radialGradient></defs></svg>
           </div>
-          <div class="inline-block text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--ember-light)] bg-[var(--ember)]/15 px-3 py-1 rounded-full mb-2">Step 1 of 2</div>
-          <h1 class="font-display text-3xl sm:text-4xl uppercase text-cream tracking-wide">Player Registration</h1>
-          <p class="text-cream/45 text-sm font-medium mt-1.5">Honganuru Premier League &mdash; Season 2</p>
+          <div class="inline-block text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--ember-light)] bg-[var(--ember)]/15 px-3 py-1 rounded-full mb-1.5 sm:mb-2">Step 1 of 2</div>
+          <h1 class="font-display text-2xl sm:text-4xl uppercase text-cream tracking-wide">Player Registration</h1>
+          <p class="text-cream/45 text-xs sm:text-sm font-medium mt-1">Honganuru Premier League &mdash; Season 2</p>
         </div>
 
-        <div id="reg-error" class="hidden mb-5 rounded-lg border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm font-semibold text-red-300"></div>
+        <div id="reg-error" class="hidden mb-4 rounded-lg border border-red-400/30 bg-red-400/10 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-red-300"></div>
 
-        <form id="reg-form" class="space-y-5" onsubmit="return handleRegister(event)">
+        <form id="reg-form" class="space-y-4 sm:space-y-5" onsubmit="return handleRegister(event)">
           <div>
-            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-2">Full Name</label>
-            <input id="f-name" type="text" required placeholder="Enter your full name"
-              class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5 sm:mb-2">Full Name</label>
+            <input id="f-name" type="text" required placeholder="Enter your full name" autocapitalize="words"
+              class="field-input w-full rounded-lg px-4 py-3 text-cream font-medium placeholder:text-cream/25">
           </div>
 
           <div>
-            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-2">Mobile Number</label>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5 sm:mb-2">Mobile Number</label>
             <input id="f-mobile" type="tel" required inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit mobile number"
-              class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+              class="field-input w-full rounded-lg px-4 py-3 text-cream font-medium placeholder:text-cream/25 font-mono">
           </div>
 
           <div>
-            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-3">Select Your Role</label>
-            <div id="role-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+            <div class="flex items-center justify-between mb-1.5 sm:mb-2">
+              <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50">Your Team <span class="text-cream/35 text-[10px] lowercase font-normal">(Optional)</span></label>
+              <span class="text-[10px] text-[var(--gold)] font-bold">Select or type team</span>
+            </div>
+            <input id="f-team" list="teams-datalist" type="text" placeholder="e.g. Honganuru Strikers (or leave blank)"
+              class="field-input w-full rounded-lg px-4 py-3 text-cream font-medium placeholder:text-cream/25">
+            <datalist id="teams-datalist"></datalist>
+            <p class="text-[10px] text-cream/40 mt-1">Belong to a team? Enter their name to join their roster. Leave blank to enter the open player pool.</p>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-2">Select Your Role</label>
+            <div id="role-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3"></div>
             <input type="hidden" id="f-role" required>
           </div>
 
-          <button type="submit" id="reg-submit" class="btn-ember w-full font-extrabold text-sm uppercase tracking-[0.15em] px-6 py-4 rounded-lg mt-2" disabled>
+          <button type="submit" id="reg-submit" class="btn-ember w-full font-extrabold text-xs sm:text-sm uppercase tracking-[0.15em] px-6 py-3.5 sm:py-4 rounded-lg mt-2" disabled>
             Complete Player Registration
           </button>
 
-          <div class="flex items-center justify-between pt-2">
-            <button type="button" onclick="showView('team-register')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--gold)] hover:underline">
-              Register A Team Instead &rarr;
+          <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-2.5 pt-2 text-center">
+            <button type="button" onclick="showView('welcome')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-cream/40 hover:text-cream/80 transition-colors py-1">
+              &larr; Back to Home
             </button>
-            <button type="button" onclick="showView('welcome')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-cream/35 hover:text-cream/70 transition-colors">
-              &larr; Back
+            <button type="button" onclick="showView('team-register')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--gold)] hover:underline py-1">
+              Register A Team Instead &rarr;
             </button>
           </div>
         </form>
@@ -724,62 +740,59 @@
 
 <!-- ===================== TEAM REGISTRATION ===================== -->
 <section id="view-team-register" class="view">
-  <div class="relative min-h-screen bg-stage flex items-center justify-center px-4 py-28 overflow-hidden">
+  <div class="relative min-h-screen bg-stage flex items-center justify-center px-3 sm:px-4 py-20 sm:py-28 overflow-hidden">
 
     <div class="relative z-10 w-full max-w-lg" style="perspective:1200px;">
-      <div id="team-card" class="card-texture border border-[var(--line)] rounded-2xl p-6 sm:p-9 backdrop-blur-sm tilt" style="transform-style:preserve-3d;">
+      <div id="team-card" class="card-texture border border-[var(--line)] rounded-2xl p-4 sm:p-9 backdrop-blur-sm tilt" style="transform-style:preserve-3d;">
 
-        <div class="text-center mb-7">
-          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-[var(--ember)]/12 border border-[var(--ember)]/30 flex items-center justify-center">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff8a3d" stroke-width="2"><path d="M12 15a6 6 0 0 0 6-6V4H6v5a6 6 0 0 0 6 6z"/><path d="M6 5H3v2a3 3 0 0 0 3 3M18 5h3v2a3 3 0 0 1-3 3M12 15v3m-4 3h8"/></svg>
+        <div class="text-center mb-5 sm:mb-7">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-full bg-[var(--blue)]/15 border border-[var(--blue)]/35 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blue-light)" stroke-width="2"><path d="M12 15a6 6 0 0 0 6-6V4H6v5a6 6 0 0 0 6 6z"/><path d="M6 5H3v2a3 3 0 0 0 3 3M18 5h3v2a3 3 0 0 1-3 3M12 15v3m-4 3h8"/></svg>
           </div>
-          <div class="inline-block text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--gold)] bg-[var(--gold)]/10 border border-[var(--gold)]/20 px-3 py-1 rounded-full mb-2">Step 2 of 2</div>
-          <h1 class="font-display text-3xl sm:text-4xl uppercase text-cream tracking-wide">Team Registration</h1>
-          <p class="text-cream/45 text-sm font-medium mt-1.5">Honganuru Premier League &mdash; Season 2</p>
+          <div class="inline-block text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--gold)] bg-[var(--gold)]/10 border border-[var(--gold)]/20 px-3 py-1 rounded-full mb-1.5 sm:mb-2">Step 2 of 2</div>
+          <h1 class="font-display text-2xl sm:text-4xl uppercase text-cream tracking-wide">Team Registration</h1>
+          <p class="text-cream/45 text-xs sm:text-sm font-medium mt-1">Honganuru Premier League &mdash; Season 2</p>
         </div>
 
-        <div id="team-error" class="hidden mb-5 rounded-lg border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm font-semibold text-red-300"></div>
+        <div id="team-error" class="hidden mb-4 rounded-lg border border-red-400/30 bg-red-400/10 px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-red-300"></div>
 
-        <form id="team-form" class="space-y-4" onsubmit="return handleTeamRegister(event)">
+        <form id="team-form" class="space-y-4 sm:space-y-5" onsubmit="return handleTeamRegister(event)">
           <div>
-            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Team Name</label>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5 sm:mb-2">Team Name</label>
             <input id="t-name" type="text" required placeholder="e.g. Honganuru Strikers"
-              class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+              class="field-input w-full rounded-lg px-4 py-3 text-cream font-medium placeholder:text-cream/25">
           </div>
 
-          <div class="grid sm:grid-cols-2 gap-3">
+          <div class="grid sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Captain Name</label>
+              <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5 sm:mb-2">Captain Name</label>
               <input id="t-captain" type="text" required placeholder="Captain full name"
-                class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+                class="field-input w-full rounded-lg px-4 py-3 text-cream font-medium placeholder:text-cream/25">
             </div>
 
             <div>
-              <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Captain Mobile Number</label>
-              <input id="t-mobile" type="tel" required maxlength="10" placeholder="10-digit number"
-                class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25 font-mono">
+              <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5 sm:mb-2">Captain Mobile</label>
+              <input id="t-mobile" type="tel" required inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit number"
+                class="field-input w-full rounded-lg px-4 py-3 text-cream font-medium placeholder:text-cream/25 font-mono">
             </div>
           </div>
 
           <div>
-            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Home Ground / Area</label>
-            <input id="t-ground" type="text" required placeholder="e.g. Honganuru Central Ground"
-              class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Squad Players (Comma-separated)</label>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5 sm:mb-2">Squad Players (Comma-separated)</label>
             <textarea id="t-players" rows="3" placeholder="Enter player names separated by comma (e.g. Darshan, Rahul, Kiran, Puneeth...)"
-              class="field-input w-full rounded-lg px-4 py-2.5 text-cream text-sm font-medium placeholder:text-cream/25"></textarea>
+              class="field-input w-full rounded-lg px-4 py-2.5 text-cream font-medium placeholder:text-cream/25 text-sm"></textarea>
           </div>
 
-          <button type="submit" id="team-submit" class="btn-ember w-full font-extrabold text-sm uppercase tracking-[0.15em] px-6 py-4 rounded-lg mt-2">
+          <button type="submit" id="team-submit" class="btn-ember w-full font-extrabold text-xs sm:text-sm uppercase tracking-[0.15em] px-6 py-3.5 sm:py-4 rounded-lg mt-2">
             Register Team &rarr;
           </button>
 
-          <div class="text-center pt-2">
-            <button type="button" onclick="showView('welcome')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-cream/35 hover:text-cream/70 transition-colors">
+          <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-2.5 pt-2 text-center">
+            <button type="button" onclick="showView('welcome')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-cream/40 hover:text-cream/80 transition-colors py-1">
               &larr; Back to Home
+            </button>
+            <button type="button" onclick="showView('register')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--blue-light)] hover:underline py-1">
+              Register A Player Instead &rarr;
             </button>
           </div>
         </form>
@@ -790,14 +803,14 @@
 
 <!-- ===================== TEAM SUCCESS ===================== -->
 <section id="view-team-success" class="view">
-  <div class="relative min-h-screen bg-stage flex items-center justify-center px-6 overflow-hidden">
+  <div class="relative min-h-screen bg-stage flex items-center justify-center px-4 sm:px-6 overflow-hidden">
     <div class="relative z-10 text-center max-w-md">
-      <div id="team-success-icon" class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:radial-gradient(circle, rgba(61,138,46,0.28), rgba(61,138,46,0.05)); border:2px solid rgba(143,224,122,0.5);">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8fe07a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      <div id="team-success-icon" class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-5 sm:mb-6 rounded-full flex items-center justify-center" style="background:radial-gradient(circle, rgba(61,138,46,0.28), rgba(61,138,46,0.05)); border:2px solid rgba(143,224,122,0.5);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#8fe07a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
       </div>
       <div class="inline-block text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full mb-3">Team Confirmed</div>
-      <h1 class="font-display text-4xl sm:text-5xl uppercase text-cream mb-3">Team<br>Registered!</h1>
-      <p id="team-success-msg" class="text-cream/60 text-sm font-medium leading-relaxed mb-8">
+      <h1 class="font-display text-3xl sm:text-5xl uppercase text-cream mb-2 sm:mb-3">Team<br>Registered!</h1>
+      <p id="team-success-msg" class="text-cream/60 text-xs sm:text-sm font-medium leading-relaxed mb-6 sm:mb-8">
         Your team is officially enrolled in Honganuru Premier League &ndash; Season 2!
       </p>
 
@@ -837,61 +850,61 @@
 
 <!-- ===================== ADMIN DASHBOARD ===================== -->
 <section id="view-admin" class="view">
-  <div class="min-h-screen bg-stage pt-24 pb-16 px-4 sm:px-6">
+  <div class="min-h-screen bg-stage pt-20 sm:pt-24 pb-16 px-3 sm:px-6">
     <div class="max-w-6xl mx-auto">
 
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
         <div>
           <div class="flex items-center gap-2 mb-1">
-            <span class="w-2 h-2 rounded-full bg-[var(--pitch-light)] animate-pulse"></span>
-            <span class="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[var(--ember-light)]">Tournament Control</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--blue-light)]">Tournament Control</span>
           </div>
-          <h1 class="font-display text-3xl sm:text-4xl uppercase text-cream tracking-wide">HPL Season 2 &ndash; Management</h1>
+          <h1 class="font-display text-2xl sm:text-4xl uppercase text-cream tracking-wide">HPL Season 2 &ndash; Management</h1>
         </div>
-        <div class="flex items-center gap-3">
-          <button onclick="showView('welcome')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--blue-light)] border border-[var(--blue)]/30 rounded-lg px-3.5 py-2 hover:bg-[var(--blue)]/10 transition-colors">Home Page</button>
-          <button onclick="logoutAdmin()" class="text-[11px] font-bold uppercase tracking-[0.2em] text-cream/40 hover:text-red-300 border border-[var(--line)] rounded-lg px-4 py-2 transition-colors">Logout</button>
+        <div class="flex items-center gap-2">
+          <button onclick="showView('welcome')" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--blue-light)] border border-[var(--blue)]/30 rounded-lg px-3 py-1.5 hover:bg-[var(--blue)]/10 transition-colors">Home Page</button>
+          <button onclick="logoutAdmin()" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-cream/40 hover:text-red-300 border border-[var(--line)] rounded-lg px-3 py-1.5 transition-colors">Logout</button>
         </div>
       </div>
 
       <!-- tabs -->
-      <div class="flex items-center gap-2 mb-8 border-b border-[var(--line)]">
+      <div class="flex items-center gap-2 mb-6 sm:mb-8 border-b border-[var(--line)]">
         <button id="tab-btn-players" onclick="switchAdminTab('players')" class="admin-tab-btn active px-4 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em]">Players</button>
         <button id="tab-btn-teams" onclick="switchAdminTab('teams')" class="admin-tab-btn px-4 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em]">Teams</button>
       </div>
 
       <!-- ===== TAB: PLAYERS ===== -->
       <div id="admin-tab-players" class="admin-tab">
-        <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-8" style="perspective:1000px;">
-          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4 col-span-2 sm:col-span-1">
-            <div class="font-display text-3xl text-cream" id="stat-total">0</div>
-            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Total Players</div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3 mb-6 sm:mb-8" style="perspective:1000px;">
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-3 sm:p-4 col-span-2 sm:col-span-1">
+            <div class="font-display text-2xl sm:text-3xl text-cream" id="stat-total">0</div>
+            <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Total Players</div>
           </div>
-          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
-            <div class="font-display text-3xl text-blue-300" id="stat-batter">0</div>
-            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Batters</div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-3 sm:p-4">
+            <div class="font-display text-2xl sm:text-3xl text-blue-300" id="stat-batter">0</div>
+            <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Batters</div>
           </div>
-          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
-            <div class="font-display text-3xl" style="color:var(--ember-light);" id="stat-bowler">0</div>
-            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Bowlers</div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-3 sm:p-4">
+            <div class="font-display text-2xl sm:text-3xl" style="color:var(--gold-light);" id="stat-bowler">0</div>
+            <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Bowlers</div>
           </div>
-          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
-            <div class="font-display text-3xl" style="color:#8fe07a;" id="stat-keeper">0</div>
-            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Keepers</div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-3 sm:p-4">
+            <div class="font-display text-2xl sm:text-3xl text-purple-300" id="stat-keeper">0</div>
+            <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Keepers</div>
           </div>
-          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
-            <div class="font-display text-3xl" style="color:var(--gold);" id="stat-allrounder">0</div>
-            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">All-Rounders</div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-3 sm:p-4">
+            <div class="font-display text-2xl sm:text-3xl text-emerald-400" id="stat-allrounder">0</div>
+            <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">All-Rounders</div>
           </div>
-          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
-            <div class="font-display text-3xl text-purple-300" id="stat-extra">0</div>
-            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Extra Players</div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-3 sm:p-4">
+            <div class="font-display text-2xl sm:text-3xl text-rose-300" id="stat-extra">0</div>
+            <div class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Extra Players</div>
           </div>
         </div>
 
         <div class="flex items-center justify-between mb-4 gap-3">
           <input id="admin-search" oninput="renderTable()" type="text" placeholder="Search by name or mobile..."
-            class="field-input rounded-lg px-4 py-2.5 text-sm text-cream w-full max-w-xs placeholder:text-cream/25">
+            class="field-input rounded-lg px-4 py-2.5 text-sm text-cream w-full sm:max-w-xs placeholder:text-cream/25">
         </div>
 
         <!-- table (desktop) -->
@@ -902,6 +915,7 @@
                 <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Player Name</th>
                 <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Mobile Number</th>
                 <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Role</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Team</th>
                 <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Registration Date</th>
               </tr>
             </thead>
@@ -918,19 +932,18 @@
       <!-- ===== TAB: TEAMS ===== -->
       <div id="admin-tab-teams" class="admin-tab hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
-          <div class="font-display text-2xl text-cream" id="teams-total-label">0 Teams Registered</div>
-          <input id="admin-teams-search" oninput="renderTeamsAdmin()" type="text" placeholder="Search team, captain, or ground..."
-            class="field-input rounded-lg px-4 py-2.5 text-sm text-cream w-full max-w-xs placeholder:text-cream/25">
+          <div class="font-display text-xl sm:text-2xl text-cream" id="teams-total-label">0 Teams Registered</div>
+          <input id="admin-teams-search" oninput="renderTeamsAdmin()" type="text" placeholder="Search team, captain, or squad player..."
+            class="field-input rounded-lg px-4 py-2.5 text-sm text-cream w-full sm:max-w-xs placeholder:text-cream/25">
         </div>
         <div class="hidden md:block card-texture border border-[var(--line)] rounded-2xl overflow-hidden">
           <table class="w-full text-sm">
             <thead>
               <tr class="border-b border-[var(--line)] text-left">
-                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Team Name</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Team Name (Click to View Roster)</th>
                 <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Captain</th>
                 <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Mobile</th>
-                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Home Ground</th>
-                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Squad Size</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Squad Members &amp; Roles</th>
                 <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Registered</th>
               </tr>
             </thead>
@@ -945,6 +958,39 @@
     </div>
   </div>
 </section>
+
+<!-- ===================== TEAM ROSTER & ROLES MODAL ===================== -->
+<div id="team-roster-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md transition-all">
+  <div class="relative w-full max-w-xl card-texture border border-[var(--blue)]/40 rounded-2xl p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh]">
+    <!-- Modal Header -->
+    <div class="flex items-start justify-between gap-3 pb-3 border-b border-white/10">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🛡️</span>
+          <h2 id="modal-team-name" class="font-display text-2xl sm:text-3xl uppercase text-white leading-tight"></h2>
+        </div>
+        <div id="modal-team-captain" class="text-xs text-cream/70 mt-1 flex items-center gap-2"></div>
+      </div>
+      <button type="button" onclick="closeTeamRosterModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-cream flex items-center justify-center transition-colors shrink-0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Squad Role Summary Stats -->
+    <div id="modal-roster-summary" class="flex flex-wrap items-center gap-1.5 py-3 border-b border-white/5"></div>
+
+    <!-- Member List with Roles -->
+    <div class="flex-1 overflow-y-auto py-3 space-y-2 pr-1" id="modal-roster-list"></div>
+
+    <!-- Modal Footer -->
+    <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+      <span id="modal-roster-count" class="text-xs text-cream/50"></span>
+      <button type="button" onclick="closeTeamRosterModal()" class="btn-ghost font-bold text-xs uppercase tracking-wider px-5 py-2 rounded-lg">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
   const ROLES = [
@@ -1141,11 +1187,12 @@
     const currentStats = stats || latestStats;
     const rolesData = (currentStats && currentStats.roles) ? currentStats.roles : {};
 
-    grid.innerHTML = ROLES.map(r => {
+    grid.innerHTML = ROLES.map((r, idx) => {
       const count = rolesData[r.id] !== undefined ? rolesData[r.id] : 0;
+      const isLastOdd = (idx === ROLES.length - 1 && ROLES.length % 2 !== 0);
       return `
         <button type="button" onclick="goRegisterWithRole('${r.id}')"
-          class="role-pill glass rounded-2xl py-5 px-3 flex flex-col items-center gap-1.5 text-center group hover:border-[var(--blue-light)] transition-all">
+          class="role-pill glass rounded-2xl py-4 sm:py-5 px-3 flex flex-col items-center gap-1.5 text-center group hover:border-[var(--blue-light)] transition-all ${isLastOdd ? 'col-span-2 sm:col-span-1 max-w-[220px] mx-auto w-full' : ''}">
           <span class="text-2xl transform group-hover:scale-110 transition-transform">${r.icon}</span>
           <span class="text-xs font-bold text-cream/90 leading-tight">${r.label}</span>
           <span class="text-[10px] font-extrabold uppercase tracking-wider text-[var(--blue-light)] bg-[var(--blue)]/15 border border-[var(--blue)]/30 px-2.5 py-0.5 rounded-full mt-1">
@@ -1206,6 +1253,9 @@
       renderTeamsAdmin();
     } else if (id === 'welcome') {
       refreshHeroStats();
+      populateTeamDatalist();
+    } else if (id === 'register') {
+      populateTeamDatalist();
     }
   }
 
@@ -1249,9 +1299,9 @@
     }
   }
 
-  // ---------- 3D pointer tilt ----------
+  // ---------- 3D pointer tilt (mouse/pointer only, disabled on touch) ----------
   function attachTilt(el, intensity){
-    if(!el) return;
+    if(!el || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     intensity = intensity || 10;
     el.addEventListener('mousemove', (e)=>{
       const r = el.getBoundingClientRect();
@@ -1309,6 +1359,7 @@
 
     const name = document.getElementById('f-name').value.trim();
     const mobile = document.getElementById('f-mobile').value.trim();
+    const team = (document.getElementById('f-team')?.value || '').trim();
     const role = selectedRole;
     const errBox = document.getElementById('reg-error');
     const submitBtn = document.getElementById('reg-submit');
@@ -1317,14 +1368,16 @@
     submitBtn.textContent = 'Registering...';
 
     try {
-      await API.registerPlayer({ name, mobile, role });
+      await API.registerPlayer({ name, mobile, role, team });
       errBox.classList.add('hidden');
-      lastRegisteredPlayer = { name, mobile, role };
+      lastRegisteredPlayer = { name, mobile, role, team };
 
+      const teamMsg = team ? ` for team "${team}"` : '';
       document.getElementById('player-success-msg').textContent =
-        `Welcome ${name}! Your registration for Honganuru Premier League – Season 2 has been completed.`;
+        `Welcome ${name}! Your registration for Honganuru Premier League – Season 2${teamMsg} has been completed.`;
 
       showView('success');
+      populateTeamDatalist();
     } catch (err) {
       errBox.textContent = err.message || "Failed to register player. Please try again.";
       errBox.classList.remove('hidden');
@@ -1355,15 +1408,14 @@
     const name = document.getElementById('t-name').value.trim();
     const captain = document.getElementById('t-captain').value.trim();
     const mobile = document.getElementById('t-mobile').value.trim();
-    const ground = document.getElementById('t-ground').value.trim();
     const squadRaw = (document.getElementById('t-players')?.value || '').trim();
     const players = squadRaw ? squadRaw.split(',').map(s => s.trim()).filter(Boolean) : [captain];
 
     const errBox = document.getElementById('team-error');
     const submitBtn = document.getElementById('team-submit');
 
-    if(name.length < 2 || captain.length < 2 || !/^[0-9]{10}$/.test(mobile) || ground.length < 2){
-      errBox.textContent = "Please fill all required team details with a valid 10-digit captain mobile.";
+    if(name.length < 2 || captain.length < 2 || !/^[0-9]{10}$/.test(mobile)){
+      errBox.textContent = "Please fill team name and captain with a valid 10-digit mobile number.";
       errBox.classList.remove('hidden');
       return false;
     }
@@ -1372,7 +1424,7 @@
     submitBtn.textContent = 'Registering Team...';
 
     try {
-      await API.registerTeam({ name, captain, mobile, ground, players });
+      await API.registerTeam({ name, captain, mobile, players });
       errBox.classList.add('hidden');
 
       document.getElementById('team-success-msg').textContent =
@@ -1381,6 +1433,7 @@
       // Reset form
       document.getElementById('team-form').reset();
       showView('team-success');
+      populateTeamDatalist();
     } catch(err) {
       errBox.textContent = err.message || "Failed to register team. Please try again.";
       errBox.classList.remove('hidden');
@@ -1469,6 +1522,19 @@
     } catch (e) {}
   }
 
+  let cachedTeams = [];
+  let cachedPlayers = [];
+
+  async function populateTeamDatalist() {
+    try {
+      const teams = await API.getTeams();
+      const datalist = document.getElementById('teams-datalist');
+      if (datalist && Array.isArray(teams)) {
+        datalist.innerHTML = teams.map(t => `<option value="${escapeHtml(t.name)}"></option>`).join('');
+      }
+    } catch(e) {}
+  }
+
   async function renderTable() {
     const tbody = document.getElementById('admin-table-body');
     const cards = document.getElementById('admin-cards');
@@ -1478,6 +1544,7 @@
 
     try {
       const players = await API.getPlayers(query);
+      cachedPlayers = players || [];
 
       if (!players || players.length === 0) {
         if (tbody) tbody.innerHTML = '';
@@ -1496,12 +1563,22 @@
           return `
             <tr class="border-b border-[var(--line)] hover:bg-white/[0.02] transition-colors">
               <td class="px-6 py-4 font-bold text-cream">${escapeHtml(p.name)}</td>
-              <td class="px-6 py-4 font-mono text-cream/70">${escapeHtml(p.mobile)}</td>
+              <td class="px-6 py-4 font-mono text-cream/70">
+                <a href="tel:${p.mobile}" class="hover:underline text-[var(--blue-light)]">${escapeHtml(p.mobile)}</a>
+              </td>
               <td class="px-6 py-4">
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold ${r.badge}">
                   <span>${r.icon}</span>
                   <span>${r.label}</span>
                 </span>
+              </td>
+              <td class="px-6 py-4">
+                ${p.team ? `
+                  <button type="button" onclick="openTeamRosterModal('${escapeHtml(p.team)}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold text-[var(--gold)] hover:text-white bg-[var(--gold)]/10 border border-[var(--gold)]/25 hover:bg-[var(--gold)]/20 transition-all cursor-pointer">
+                    <span>🛡️</span>
+                    <span>${escapeHtml(p.team)}</span>
+                  </button>
+                ` : `<span class="text-xs text-cream/35 italic">Open Pool</span>`}
               </td>
               <td class="px-6 py-4 text-xs text-cream/40">${fmtDate(p.registeredAt)}</td>
             </tr>
@@ -1513,16 +1590,34 @@
         cards.innerHTML = players.map(p => {
           const r = roleMeta(p.role);
           return `
-            <div class="card-texture border border-[var(--line)] rounded-xl p-4 flex flex-col gap-2">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-cream text-base">${escapeHtml(p.name)}</span>
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${r.badge}">
-                  ${r.icon} ${r.label}
+            <div class="card-texture border border-[var(--line)] rounded-xl p-3.5 sm:p-4 flex flex-col gap-2.5 shadow-lg">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-[var(--blue)]/20 border border-[var(--blue)]/40 flex items-center justify-center shrink-0 text-sm">
+                    ${r.icon}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-bold text-cream text-base truncate">${escapeHtml(p.name)}</div>
+                    <div class="text-[11px] mt-0.5">
+                      ${p.team ? `
+                        <button type="button" onclick="openTeamRosterModal('${escapeHtml(p.team)}')" class="text-[var(--gold)] font-medium hover:underline flex items-center gap-1">
+                          <span>🛡️</span>
+                          <span>${escapeHtml(p.team)}</span>
+                        </button>
+                      ` : `<span class="text-cream/35 italic">Open Pool</span>`}
+                    </div>
+                  </div>
+                </div>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase shrink-0 ${r.badge}">
+                  ${r.label}
                 </span>
               </div>
-              <div class="flex items-center justify-between text-xs text-cream/60">
-                <span class="font-mono">${escapeHtml(p.mobile)}</span>
-                <span>${fmtDate(p.registeredAt)}</span>
+              <div class="flex items-center justify-between text-xs text-cream/70 pt-2 border-t border-white/5">
+                <a href="tel:${p.mobile}" class="flex items-center gap-1.5 font-mono text-[var(--blue-light)] hover:underline">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <span>${escapeHtml(p.mobile)}</span>
+                </a>
+                <span class="text-[10px] text-cream/40">${fmtDate(p.registeredAt)}</span>
               </div>
             </div>
           `;
@@ -1531,6 +1626,36 @@
     } catch (e) {
       console.error('Error rendering players table:', e);
     }
+  }
+
+  function computeTeamRoster(t, allPlayers = cachedPlayers) {
+    if (Array.isArray(t.roster) && t.roster.length > 0) return t.roster;
+
+    const teamNameLower = (t.name || '').toLowerCase();
+    const teamPlayers = allPlayers.filter(p =>
+      (p.teamId && p.teamId === t.id) ||
+      (p.team && p.team.toLowerCase() === teamNameLower)
+    );
+
+    const squadNames = new Set();
+    if (t.captain) squadNames.add(t.captain.trim());
+    if (Array.isArray(t.players)) {
+      t.players.forEach(pn => { if (pn && pn.trim()) squadNames.add(pn.trim()); });
+    }
+    teamPlayers.forEach(tp => { if (tp.name && tp.name.trim()) squadNames.add(tp.name.trim()); });
+
+    return Array.from(squadNames).map(name => {
+      const matched = teamPlayers.find(tp => tp.name.toLowerCase() === name.toLowerCase()) ||
+                      allPlayers.find(p => p.name.toLowerCase() === name.toLowerCase());
+      const isCaptain = Boolean(t.captain && t.captain.toLowerCase() === name.toLowerCase());
+      return {
+        name,
+        role: matched ? matched.role : (isCaptain ? 'allrounder' : 'extra'),
+        mobile: matched ? matched.mobile : (isCaptain ? t.mobile : ''),
+        isCaptain,
+        isRegistered: Boolean(matched)
+      };
+    });
   }
 
   async function renderTeamsAdmin() {
@@ -1543,6 +1668,7 @@
 
     try {
       const teams = await API.getTeams(query);
+      cachedTeams = teams || [];
 
       if (label) {
         label.textContent = `${teams.length} Team${teams.length === 1 ? '' : 's'} Registered`;
@@ -1561,23 +1687,40 @@
 
       if (tbody) {
         tbody.innerHTML = teams.map(t => {
-          const squad = Array.isArray(t.players) ? t.players : (t.players ? [t.players] : []);
+          const roster = computeTeamRoster(t, cachedPlayers);
           return `
             <tr class="border-b border-[var(--line)] hover:bg-white/[0.02] transition-colors">
-              <td class="px-6 py-4 font-bold text-cream">
-                <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-[var(--blue-light)]"></span>
-                  <span>${escapeHtml(t.name)}</span>
-                </div>
+              <td class="px-6 py-4">
+                <button type="button" onclick="openTeamRosterModal('${escapeHtml(t.name)}')" class="text-left group cursor-pointer">
+                  <div class="flex items-center gap-2 font-bold text-base text-cream group-hover:text-[var(--blue-light)] transition-colors">
+                    <span class="text-base">🛡️</span>
+                    <span>${escapeHtml(t.name)}</span>
+                    <span class="text-[10px] font-extrabold text-[var(--blue-light)] bg-[var(--blue)]/15 border border-[var(--blue)]/30 px-2 py-0.5 rounded-full group-hover:bg-[var(--blue)]/30 transition-all">
+                      View Roster &rarr;
+                    </span>
+                  </div>
+                </button>
               </td>
               <td class="px-6 py-4 font-bold text-cream/90">${escapeHtml(t.captain)}</td>
-              <td class="px-6 py-4 font-mono text-cream/70">${escapeHtml(t.mobile)}</td>
-              <td class="px-6 py-4 text-cream/70 text-xs">${escapeHtml(t.ground)}</td>
+              <td class="px-6 py-4 font-mono text-cream/70">
+                <a href="tel:${t.mobile}" class="hover:underline text-[var(--blue-light)]">${escapeHtml(t.mobile)}</a>
+              </td>
               <td class="px-6 py-4">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-[var(--blue)]/15 border border-[var(--blue)]/30 text-[var(--blue-light)]">
-                  ${squad.length} players
-                </span>
-                ${squad.length > 0 ? `<div class="text-[10px] text-cream/40 mt-1 max-w-xs truncate" title="${escapeHtml(squad.join(', '))}">${escapeHtml(squad.join(', '))}</div>` : ''}
+                <button type="button" onclick="openTeamRosterModal('${escapeHtml(t.name)}')" class="text-left group cursor-pointer block">
+                  <div class="flex items-center gap-2 mb-1.5">
+                    <span class="text-xs font-bold text-[var(--gold-light)] bg-[var(--gold)]/10 border border-[var(--gold)]/20 px-2.5 py-0.5 rounded-full group-hover:bg-[var(--gold)]/25 transition-colors">
+                      ${roster.length} Players
+                    </span>
+                    <span class="text-[11px] text-cream/40 group-hover:text-cream/80 transition-colors">Click to view roles &rarr;</span>
+                  </div>
+                  <div class="flex flex-wrap gap-1 max-w-sm">
+                    ${roster.slice(0, 4).map(m => {
+                      const rm = roleMeta(m.role);
+                      return `<span class="inline-flex items-center gap-1 text-[10px] font-medium ${rm.badge} px-2 py-0.5 rounded-md">${rm.icon} ${escapeHtml(m.name)}</span>`;
+                    }).join('')}
+                    ${roster.length > 4 ? `<span class="text-[10px] text-cream/40 px-1 py-0.5">+${roster.length - 4} more</span>` : ''}
+                  </div>
+                </button>
               </td>
               <td class="px-6 py-4 text-xs text-cream/40">${fmtDate(t.registeredAt)}</td>
             </tr>
@@ -1587,26 +1730,55 @@
 
       if (cards) {
         cards.innerHTML = teams.map(t => {
-          const squad = Array.isArray(t.players) ? t.players : (t.players ? [t.players] : []);
+          const roster = computeTeamRoster(t, cachedPlayers);
           return `
-            <div class="card-texture border border-[var(--line)] rounded-xl p-4 flex flex-col gap-2.5">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-cream text-base">${escapeHtml(t.name)}</span>
-                <span class="text-[10px] font-extrabold uppercase tracking-wider text-[var(--blue-light)] bg-[var(--blue)]/15 border border-[var(--blue)]/30 px-2 py-0.5 rounded-full">
-                  ${squad.length} Players
-                </span>
+            <div class="card-texture border border-[var(--line)] rounded-xl p-3.5 sm:p-4 flex flex-col gap-2.5 shadow-lg">
+              <div class="flex items-start justify-between gap-2">
+                <button type="button" onclick="openTeamRosterModal('${escapeHtml(t.name)}')" class="text-left group flex-1">
+                  <div class="font-bold text-cream text-base sm:text-lg leading-tight group-hover:text-[var(--blue-light)] transition-colors flex items-center gap-1.5">
+                    <span>🛡️</span>
+                    <span>${escapeHtml(t.name)}</span>
+                  </div>
+                  <div class="text-[11px] text-[var(--gold)] font-bold mt-0.5 flex items-center gap-1">
+                    <span>Tap to view full squad &amp; roles</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m0 0l-6-6m6 6l-6 6"/></svg>
+                  </div>
+                </button>
+                <button type="button" onclick="openTeamRosterModal('${escapeHtml(t.name)}')" class="text-[10px] font-extrabold uppercase tracking-wider text-[var(--blue-light)] bg-[var(--blue)]/15 border border-[var(--blue)]/30 px-2.5 py-1 rounded-full shrink-0">
+                  ${roster.length} Players
+                </button>
               </div>
-              <div class="text-xs text-cream/75">
-                <span class="text-cream/40">Captain:</span> <strong class="text-cream">${escapeHtml(t.captain)}</strong> &bull; <span class="font-mono">${escapeHtml(t.mobile)}</span>
+
+              <!-- Captain Box -->
+              <div class="text-xs text-cream/80 bg-white/[0.03] p-2 sm:p-2.5 rounded-lg border border-white/5 flex items-center justify-between">
+                <div>
+                  <span class="text-cream/40 text-[9px] uppercase font-bold block">Captain</span>
+                  <span class="font-bold text-cream text-xs sm:text-sm">${escapeHtml(t.captain)}</span>
+                </div>
+                <a href="tel:${t.mobile}" class="flex items-center gap-1 font-mono text-xs text-[var(--blue-light)] bg-[var(--blue)]/10 border border-[var(--blue)]/20 px-2.5 py-1 rounded-md hover:bg-[var(--blue)]/20">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <span>${escapeHtml(t.mobile)}</span>
+                </a>
               </div>
-              <div class="text-xs text-cream/60">
-                <span class="text-cream/40">Ground:</span> ${escapeHtml(t.ground)}
+
+              <!-- Squad preview with roles -->
+              <div class="bg-black/30 p-2.5 rounded-lg border border-white/5 cursor-pointer hover:border-[var(--blue)]/40 transition-all" onclick="openTeamRosterModal('${escapeHtml(t.name)}')">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-cream/50 font-bold text-[9px] uppercase tracking-wider">Squad Members &amp; Roles:</span>
+                  <span class="text-[10px] text-[var(--gold)] font-bold">Tap for full roster &rarr;</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  ${roster.map(m => {
+                    const rm = roleMeta(m.role);
+                    return `<span class="inline-flex items-center gap-1 text-[10px] font-semibold ${rm.badge} px-2 py-0.5 rounded-md">
+                      <span>${rm.icon}</span>
+                      <span>${escapeHtml(m.name)}</span>
+                      ${m.isCaptain ? '<span class="text-[8px] bg-[var(--gold)] text-black px-1 rounded uppercase font-black ml-0.5">C</span>' : ''}
+                    </span>`;
+                  }).join('')}
+                </div>
               </div>
-              ${squad.length > 0 ? `
-                <div class="text-[11px] bg-white/[0.03] p-2 rounded border border-white/5 text-cream/60">
-                  <span class="text-cream/40 font-bold block mb-0.5">Squad:</span>
-                  ${escapeHtml(squad.join(', '))}
-                </div>` : ''}
+
               <div class="text-[10px] text-cream/35 text-right">Registered: ${fmtDate(t.registeredAt)}</div>
             </div>
           `;
@@ -1615,6 +1787,109 @@
     } catch (e) {
       console.error('Error rendering teams table:', e);
     }
+  }
+
+  // ---------- Team Squad Roster Modal Popup ----------
+  function openTeamRosterModal(teamName) {
+    const modal = document.getElementById('team-roster-modal');
+    if (!modal) return;
+
+    const team = cachedTeams.find(t => (t.name || '').toLowerCase() === teamName.toLowerCase()) || {
+      name: teamName,
+      captain: 'Team Captain',
+      mobile: '',
+      players: [],
+      roster: []
+    };
+
+    const roster = computeTeamRoster(team, cachedPlayers);
+
+    document.getElementById('modal-team-name').textContent = team.name;
+
+    const meta = document.getElementById('modal-team-captain');
+    if (meta) {
+      meta.innerHTML = `
+        <span>Captain: <strong class="text-cream">${escapeHtml(team.captain || 'N/A')}</strong></span>
+        ${team.mobile ? `
+          &bull;
+          <a href="tel:${team.mobile}" class="text-[var(--blue-light)] font-mono hover:underline flex items-center gap-1">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>${escapeHtml(team.mobile)}</span>
+          </a>
+        ` : ''}
+      `;
+    }
+
+    // Role summary pills
+    const roleCounts = {};
+    roster.forEach(m => {
+      roleCounts[m.role] = (roleCounts[m.role] || 0) + 1;
+    });
+    const summaryEl = document.getElementById('modal-roster-summary');
+    if (summaryEl) {
+      summaryEl.innerHTML = ROLES.map(r => {
+        const cnt = roleCounts[r.id] || 0;
+        if (cnt === 0) return '';
+        return `
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold ${r.badge}">
+            <span>${r.icon}</span>
+            <span>${cnt} ${r.label}</span>
+          </span>
+        `;
+      }).join('');
+    }
+
+    // List of players
+    const listEl = document.getElementById('modal-roster-list');
+    if (listEl) {
+      if (roster.length === 0) {
+        listEl.innerHTML = '<div class="text-center py-6 text-cream/40 text-sm">No squad members recorded yet.</div>';
+      } else {
+        listEl.innerHTML = roster.map((m, idx) => {
+          const rm = roleMeta(m.role);
+          return `
+            <div class="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[var(--blue)]/30 transition-all">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-7 h-7 rounded-full bg-[var(--blue)]/20 text-cream font-bold text-xs flex items-center justify-center shrink-0">
+                  ${idx + 1}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-cream text-sm flex items-center gap-1.5 truncate">
+                    <span>${escapeHtml(m.name)}</span>
+                    ${m.isCaptain ? '<span class="text-[9px] bg-[var(--gold)] text-black px-1.5 py-0.5 rounded font-extrabold uppercase">Captain</span>' : ''}
+                  </div>
+                  ${m.mobile ? `
+                    <a href="tel:${m.mobile}" class="text-[11px] font-mono text-[var(--blue-light)] hover:underline flex items-center gap-1 mt-0.5">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                      <span>${escapeHtml(m.mobile)}</span>
+                    </a>
+                  ` : ''}
+                </div>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold ${rm.badge}">
+                  <span>${rm.icon}</span>
+                  <span>${rm.label}</span>
+                </span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    const countEl = document.getElementById('modal-roster-count');
+    if (countEl) countEl.textContent = `Total Squad: ${roster.length} Players`;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeTeamRosterModal() {
+    const modal = document.getElementById('team-roster-modal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
   }
 
   function roleMeta(id){ return ROLES.find(r=>r.id===id) || {label:id, icon:'', badge:''}; }
@@ -1771,9 +2046,17 @@
       e.target.value = e.target.value.replace(/\D/g,'').slice(0,10);
     });
 
+    populateTeamDatalist();
     refreshHeroStats();
     Realtime.init();
     playEntrance('welcome');
+
+    document.getElementById('team-roster-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'team-roster-modal') closeTeamRosterModal();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeTeamRosterModal();
+    });
   });
 
 </script>

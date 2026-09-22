@@ -186,7 +186,7 @@ app.get('/api/players', (req, res) => {
 });
 
 app.post('/api/players', (req, res) => {
-  const { name, mobile, role } = req.body;
+  const { name, mobile, role, team } = req.body;
 
   if (!name || name.trim().length < 2) {
     return res.status(400).json({ error: 'Player name must be at least 2 characters.' });
@@ -202,6 +202,7 @@ app.post('/api/players', (req, res) => {
 
   const db = readDb();
   db.players = db.players || [];
+  db.teams = db.teams || [];
 
   const exists = db.players.find(p => p.mobile === cleanMobile);
   if (exists) {
@@ -210,15 +211,32 @@ app.post('/api/players', (req, res) => {
     });
   }
 
+  const cleanTeam = (team || '').trim();
+  let matchedTeam = null;
+  if (cleanTeam) {
+    matchedTeam = db.teams.find(t => t.name.toLowerCase() === cleanTeam.toLowerCase());
+  }
+
   const newPlayer = {
     id: 'p-' + Date.now(),
     name: name.trim(),
     mobile: cleanMobile,
     role,
+    team: matchedTeam ? matchedTeam.name : cleanTeam,
+    teamId: matchedTeam ? matchedTeam.id : undefined,
     registeredAt: new Date().toISOString()
   };
 
   db.players.push(newPlayer);
+
+  // If player registered for an existing team, ensure they appear in the team's squad list
+  if (matchedTeam) {
+    if (!Array.isArray(matchedTeam.players)) matchedTeam.players = [];
+    if (!matchedTeam.players.some(pn => pn.toLowerCase() === name.trim().toLowerCase())) {
+      matchedTeam.players.push(name.trim());
+    }
+  }
+
   writeDb(db);
 
   const stats = computeStats(db);
@@ -232,24 +250,63 @@ app.post('/api/players', (req, res) => {
   });
 });
 
-// Teams API
+// Teams API (Includes squad roster and member playing roles)
 app.get('/api/teams', (req, res) => {
   const db = readDb();
   let teams = db.teams || [];
+  const players = db.players || [];
   const q = (req.query.q || '').trim().toLowerCase();
 
+  // Enrich each team with full member list and their roles
+  let enrichedTeams = teams.map(t => {
+    const teamNameLower = (t.name || '').toLowerCase();
+    // Find all players registered specifically under this team
+    const teamPlayers = players.filter(p =>
+      (p.teamId && p.teamId === t.id) ||
+      (p.team && p.team.toLowerCase() === teamNameLower)
+    );
+
+    // Collect all unique member names from team squad and individual registrations
+    const squadNames = new Set();
+    if (t.captain) squadNames.add(t.captain.trim());
+    if (Array.isArray(t.players)) {
+      t.players.forEach(pn => { if (pn && pn.trim()) squadNames.add(pn.trim()); });
+    }
+    teamPlayers.forEach(tp => { if (tp.name && tp.name.trim()) squadNames.add(tp.name.trim()); });
+
+    // Map each member to their known role and contact details
+    const roster = Array.from(squadNames).map(name => {
+      const matched = teamPlayers.find(tp => tp.name.toLowerCase() === name.toLowerCase()) ||
+                      players.find(p => p.name.toLowerCase() === name.toLowerCase());
+      const isCaptain = Boolean(t.captain && t.captain.toLowerCase() === name.toLowerCase());
+
+      return {
+        name,
+        role: matched ? matched.role : (isCaptain ? 'allrounder' : 'extra'),
+        mobile: matched ? matched.mobile : (isCaptain ? t.mobile : ''),
+        isCaptain,
+        isRegistered: Boolean(matched)
+      };
+    });
+
+    return {
+      ...t,
+      roster,
+      playerCount: roster.length
+    };
+  });
+
   if (q) {
-    teams = teams.filter(t =>
+    enrichedTeams = enrichedTeams.filter(t =>
       (t.name && t.name.toLowerCase().includes(q)) ||
       (t.captain && t.captain.toLowerCase().includes(q)) ||
       (t.mobile && t.mobile.includes(q)) ||
-      (t.ground && t.ground.toLowerCase().includes(q)) ||
-      (Array.isArray(t.players) && t.players.some(p => p.toLowerCase().includes(q)))
+      (t.roster && t.roster.some(m => m.name.toLowerCase().includes(q) || m.role.toLowerCase().includes(q)))
     );
   }
 
-  teams = teams.sort((a, b) => new Date(b.registeredAt) - new Date(a.registeredAt));
-  res.json(teams);
+  enrichedTeams = enrichedTeams.sort((a, b) => new Date(b.registeredAt) - new Date(a.registeredAt));
+  res.json(enrichedTeams);
 });
 
 app.post('/api/teams', (req, res) => {
@@ -265,9 +322,6 @@ app.post('/api/teams', (req, res) => {
   if (cleanMobile.length !== 10) {
     return res.status(400).json({ error: 'A valid 10-digit captain mobile number is required.' });
   }
-  if (!ground || ground.trim().length < 2) {
-    return res.status(400).json({ error: 'Home ground or location is required.' });
-  }
 
   const db = readDb();
   db.teams = db.teams || [];
@@ -277,13 +331,19 @@ app.post('/api/teams', (req, res) => {
     return res.status(409).json({ error: 'A team with this name has already been registered.' });
   }
 
+  // Parse squad players
+  const squadList = Array.isArray(players) ? players : (players ? String(players).split(',').map(s=>s.trim()).filter(Boolean) : []);
+  if (!squadList.some(pn => pn.toLowerCase() === captain.trim().toLowerCase())) {
+    squadList.unshift(captain.trim());
+  }
+
   const newTeam = {
     id: 't-' + Date.now(),
     name: name.trim(),
     captain: captain.trim(),
     mobile: cleanMobile,
-    ground: ground.trim(),
-    players: Array.isArray(players) ? players : [captain.trim()],
+    ground: (ground || '').trim(),
+    players: squadList,
     registeredAt: new Date().toISOString()
   };
 

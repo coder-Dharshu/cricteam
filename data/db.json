@@ -52,6 +52,15 @@
       "mobile": "9845112233",
       "role": "allrounder",
       "registeredAt": "2026-09-22T13:54:58.933Z"
+    },
+    {
+      "id": "p-1790089076777",
+      "name": "Rohan Sharma",
+      "mobile": "9896919327",
+      "role": "batter",
+      "team": "Honganuru Strikers",
+      "teamId": "t-1",
+      "registeredAt": "2026-09-22T14:57:56.777Z"
     }
   ],
   "teams": [
@@ -63,7 +72,8 @@
       "ground": "Honganuru Central Stadium",
       "players": [
         "Darshan Kumar",
-        "Karthik R"
+        "Karthik R",
+        "Rohan Sharma"
       ],
       "registeredAt": "2026-09-20T10:05:00.000Z"
     },
@@ -116,6 +126,19 @@
         "Harish"
       ],
       "registeredAt": "2026-09-22T14:00:32.938Z"
+    },
+    {
+      "id": "t-1790089076794",
+      "name": "Mysore Warriors 6785",
+      "captain": "Vijay Kumar",
+      "mobile": "9790476293",
+      "ground": "",
+      "players": [
+        "Vijay Kumar",
+        "Sandeep",
+        "Praveen"
+      ],
+      "registeredAt": "2026-09-22T14:57:56.794Z"
     }
   ],
   "matches": [
