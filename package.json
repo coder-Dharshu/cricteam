@@ -1,0 +1,22 @@
+{
+  "name": "honganuru-premier-league",
+  "version": "2.0.0",
+  "description": "Honganuru Premier League Season 2 application and backend server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "cricket",
+    "honganuru",
+    "hpl",
+    "scoreboard"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

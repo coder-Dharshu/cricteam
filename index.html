@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Honganuru Premier League — Season 2</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<style>
+  /* ============================================================
+     HPL Season 2 — Deep Navy + Electric Blue + Gold palette
+     ============================================================ */
+  :root{
+    /* Core backgrounds */
+    --ink:        #06080f;      /* deepest navy-black */
+    --char:       #0c1020;      /* dark navy background */
+    --navy:       #0f1629;      /* mid navy for cards */
+    --navy-light: #1a2540;      /* lighter card surface */
+
+    /* Brand accents */
+    --blue:       #3b82f6;      /* electric blue primary */
+    --blue-light: #60a5fa;      /* lighter blue */
+    --blue-dark:  #1d4ed8;      /* deep blue */
+    --blue-glow:  rgba(59,130,246,0.45);
+
+    /* Gold / highlight */
+    --gold:       #fbbf24;      /* warm gold */
+    --gold-light: #fcd34d;      /* light gold */
+    --gold-dark:  #d97706;      /* amber-gold */
+
+    /* Neutrals */
+    --white:      #ffffff;
+    --cream:      #f0f4ff;      /* cool-white with slight blue tint */
+    --muted:      rgba(224,232,255,0.55);
+    --line:       rgba(59,130,246,0.18);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:auto; }
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .font-display{ font-family:'Anton',sans-serif; letter-spacing:0.01em; }
+
+  .bg-stage{ background: var(--ink); }
+
+  /* ============ HERO STADIUM PHOTO ============ */
+  .hero-scene{ position:absolute; inset:0; overflow:hidden; }
+
+  .stadium-photo-hero{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    height:68%;
+    background: url('/stadium_bg.jpg') center 40% / cover no-repeat;
+    transform-origin:50% 100%;
+    will-change:transform;
+    animation: slowZoom 24s ease-in-out infinite alternate;
+  }
+  @keyframes slowZoom{ from{transform:scale(1.0);} to{transform:scale(1.06) translateY(-6px);} }
+
+  /* Navy fade at top edge of photo */
+  .stadium-photo-hero::before{
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(180deg, var(--ink) 0%, rgba(6,8,15,0.0) 50%);
+  }
+  /* Side + bottom vignette */
+  .stadium-photo-hero::after{
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 120% 100% at 50% 100%, transparent 40%, rgba(6,8,15,0.88) 100%),
+      linear-gradient(90deg, rgba(6,8,15,0.7) 0%, transparent 20%, transparent 80%, rgba(6,8,15,0.7) 100%),
+      linear-gradient(0deg, var(--ink) 0%, transparent 20%);
+  }
+  /* Dark navy sky for text zone */
+  .hero-dark-sky{
+    position:absolute; top:0; left:0; right:0; height:42%;
+    background: linear-gradient(180deg, rgba(6,8,15,0.99) 0%, rgba(6,8,15,0.94) 55%, rgba(6,8,15,0.0) 100%);
+    pointer-events:none;
+  }
+  /* Blue atmospheric glow at horizon */
+  .hero-ember-horizon{
+    position:absolute; left:50%; top:54%; transform:translateX(-50%);
+    width:100%; height:200px;
+    background: radial-gradient(ellipse 80% 100% at 50% 50%,
+      rgba(59,130,246,0.22) 0%, rgba(96,165,250,0.06) 45%, transparent 70%);
+    pointer-events:none;
+    animation: horizonPulse 5s ease-in-out infinite;
+  }
+  @keyframes horizonPulse{ 0%,100%{opacity:0.6;} 50%{opacity:1;} }
+
+  /* Scanline texture */
+  .hero-scanlines{
+    position:absolute; inset:0; pointer-events:none; z-index:1;
+    background-image: repeating-linear-gradient(
+      180deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 3px,
+      rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px);
+  }
+
+  /* ============ HERO TEXT ============ */
+  .hero-title-shadow{
+    text-shadow:
+      0 0 80px rgba(59,130,246,0.5),
+      0 2px 4px rgba(0,0,0,0.98),
+      0 6px 24px rgba(0,0,0,0.9),
+      0 16px 48px rgba(0,0,0,0.7);
+  }
+  .hero-sub-shadow{
+    text-shadow: 0 1px 3px rgba(0,0,0,0.98), 0 4px 16px rgba(0,0,0,0.85);
+  }
+
+  /* Clean glass text panel — navy glass with blue glow border */
+  .hero-text-panel{
+    background: linear-gradient(135deg,
+      rgba(15,22,41,0.88) 0%,
+      rgba(10,15,30,0.78) 100%);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter:blur(24px);
+    border: 1px solid rgba(59,130,246,0.30);
+    border-radius: 20px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.05) inset,
+      0 2px 0 rgba(96,165,250,0.12) inset,
+      0 24px 64px -12px rgba(0,0,0,0.85),
+      0 0 60px -15px rgba(59,130,246,0.35),
+      0 0 120px -30px rgba(59,130,246,0.20);
+  }
+
+  /* Gold gradient text for headline accent */
+  .gradient-text{
+    background: linear-gradient(100deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  /* Blue gradient text */
+  .gradient-text-blue{
+    background: linear-gradient(100deg, #93c5fd 0%, var(--blue-light) 40%, var(--blue) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes fadeUp  { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes fadeDown{ from{opacity:0;transform:translateY(-18px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes scalePop{ from{opacity:0;transform:scale(0.82);} to{opacity:1;transform:scale(1);} }
+  @keyframes goldShimmer{
+    0%  { background-position:200% center; }
+    100%{ background-position:-200% center; }
+  }
+  .animate-fade-up  { animation: fadeUp   0.7s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-fade-down{ animation: fadeDown 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-scale-pop{ animation: scalePop 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .delay-100{ animation-delay:.10s; }
+  .delay-200{ animation-delay:.20s; }
+  .delay-300{ animation-delay:.30s; }
+  .delay-400{ animation-delay:.40s; }
+  .delay-500{ animation-delay:.50s; }
+  .delay-600{ animation-delay:.60s; }
+  .delay-700{ animation-delay:.70s; }
+
+  /* Particle dots (blue-gold) */
+  .particle{
+    position:absolute; border-radius:9999px;
+    animation: particleDrift linear infinite;
+    pointer-events:none;
+  }
+  @keyframes particleDrift{
+    0%  { transform:translateY(0) scale(1); opacity:0.8; }
+    60% { opacity:1; }
+    100%{ transform:translateY(-130px) scale(0.2); opacity:0; }
+  }
+
+
+  /* Stat separator */
+  .stat-sep{ width:1px; height:32px; background:rgba(59,130,246,0.25); }
+
+  /* Primary button — electric blue */
+  .btn-ember{
+    position:relative;
+    background: linear-gradient(180deg, var(--blue-light) 0%, var(--blue) 55%, var(--blue-dark) 100%);
+    color:#ffffff;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.25) inset,
+      0 -3px 0 rgba(0,0,0,0.25) inset,
+      0 10px 0 -4px #1e3a8a,
+      0 18px 30px -8px rgba(59,130,246,0.65);
+    transition:transform .15s cubic-bezier(0.16,1,0.3,1), box-shadow .15s ease;
+    font-weight:800;
+  }
+  .btn-ember:hover:not(:disabled){
+    transform:translateY(-3px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 -3px 0 rgba(0,0,0,0.25) inset,
+                0 14px 0 -4px #1e3a8a, 0 24px 36px -8px rgba(59,130,246,0.75);
+  }
+  .btn-ember:active:not(:disabled){
+    transform:translateY(2px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 -1px 0 rgba(0,0,0,0.25) inset,
+                0 5px 0 -4px #1e3a8a, 0 8px 16px -6px rgba(59,130,246,0.5);
+  }
+  .btn-ember:disabled{ opacity:0.35; box-shadow:none; cursor:not-allowed; }
+
+  /* Ghost button — navy glass */
+  .btn-ghost{
+    background:rgba(15,22,41,0.55);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(59,130,246,0.35);
+    color:var(--cream);
+    transition:all 0.2s ease;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 4px 16px rgba(0,0,0,0.5);
+  }
+  .btn-ghost:hover{
+    background:rgba(59,130,246,0.15);
+    border-color:rgba(59,130,246,0.65);
+    transform:translateY(-2px);
+    box-shadow: 0 0 20px -4px rgba(59,130,246,0.5), 0 8px 24px rgba(0,0,0,0.55);
+  }
+  .btn-ghost:active{ transform:translateY(0); }
+
+  /* Card base — clean dark, crisp border, drop shadow only (no inner glow) */
+  .card-texture{
+    background: linear-gradient(160deg, #111827 0%, #0d1424 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.06) inset,
+      0 16px 40px -10px rgba(0,0,0,0.9),
+      0 4px 12px rgba(0,0,0,0.6);
+  }
+
+  /* Glass utility — navy dark glass, clean */
+  .glass{
+    background:rgba(13,20,36,0.70);
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(59,130,246,0.20);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .glass-strong{
+    background:rgba(8,12,24,0.85);
+    backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px);
+    border:1px solid rgba(59,130,246,0.15);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.65);
+  }
+
+  /* ============ LEGACY / SHARED ============ */
+  .bg-stage{ background: var(--ink); }
+  .marquee-mask{
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-track{ display:flex; width:max-content; animation:marqueeScroll 28s linear infinite; }
+  @keyframes marqueeScroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+  .float-slow{ animation:floatY 6s ease-in-out infinite; }
+  .float-med { animation:floatY 5s ease-in-out infinite; }
+  .float-y   { animation:floatY 4.5s ease-in-out infinite; }
+  @keyframes floatY{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+
+  .glow-pulse{ animation:glowPulse 4.5s ease-in-out infinite; }
+  @keyframes glowPulse{ 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+  .floodlight-glow{
+    position:absolute; width:75vmax; height:75vmax; pointer-events:none;
+    background:radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 60%);
+  }
+
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  /* ============ ROLE CARDS ============ */
+  .tilt{
+    transform-style:preserve-3d;
+    transition:transform .12s ease-out, box-shadow .25s ease;
+    will-change:transform;
+  }
+  .role-card{
+    box-shadow:
+      0 0 0 1px rgba(59,130,246,0.10) inset,
+      0 8px 24px -10px rgba(0,0,0,0.75),
+      0 0 20px -12px rgba(59,130,246,0.15);
+  }
+  .role-card.selected{
+    border-color:var(--blue-light);
+    background:linear-gradient(180deg, rgba(59,130,246,0.22), rgba(59,130,246,0.05));
+    box-shadow:
+      0 0 0 1px var(--blue-light),
+      0 12px 32px -10px rgba(59,130,246,0.55),
+      0 0 40px -12px rgba(59,130,246,0.35);
+  }
+  .role-card.selected .role-check{ opacity:1; transform:scale(1) translateZ(20px); }
+  .role-check{ opacity:0; transform:scale(0.5); transition:all .2s ease; }
+  .role-emoji{ transform:translateZ(24px); display:inline-block; }
+  .role-label{ transform:translateZ(16px); display:block; }
+
+  .stat-card{
+    box-shadow:
+      0 0 0 1px rgba(59,130,246,0.10) inset,
+      0 8px 28px -10px rgba(0,0,0,0.7),
+      0 0 30px -14px rgba(59,130,246,0.25);
+  }
+
+  /* ============ FORM INPUTS ============ */
+  .field-input{
+    background:rgba(15,22,41,0.6);
+    border:1px solid rgba(59,130,246,0.22);
+    color:var(--cream);
+    transition:all .2s ease;
+  }
+  .field-input:focus{
+    outline:none;
+    border-color:var(--blue-light);
+    background:rgba(15,22,41,0.8);
+    box-shadow:0 0 0 3px rgba(59,130,246,0.25), 0 0 20px -6px rgba(59,130,246,0.4);
+  }
+  .field-input::placeholder{ color:rgba(224,232,255,0.30); }
+  select.field-input option{ background:#0f1629; color:var(--cream); }
+
+  /* ============ BADGES ============ */
+  .badge{ font-family:'Inter',sans-serif; font-weight:800; font-size:10px; letter-spacing:0.08em; padding:4px 10px; border-radius:999px; text-transform:uppercase; }
+  .badge-batter  { background:rgba(96,165,250,0.18);  color:#93c5fd; border:1px solid rgba(96,165,250,0.40); }
+  .badge-bowler  { background:rgba(251,191,36,0.18);  color:var(--gold-light); border:1px solid rgba(251,191,36,0.40); }
+  .badge-keeper  { background:rgba(167,139,250,0.18); color:#c4b5fd; border:1px solid rgba(167,139,250,0.40); }
+  .badge-allrounder{ background:rgba(52,211,153,0.18); color:#6ee7b7; border:1px solid rgba(52,211,153,0.40); }
+  .badge-extra   { background:rgba(248,113,113,0.18); color:#fca5a5; border:1px solid rgba(248,113,113,0.40); }
+  .badge-live    { background:rgba(239,68,68,0.22);   color:#f87171; border:1px solid rgba(239,68,68,0.45); }
+  .badge-upcoming{ background:rgba(251,191,36,0.18);  color:var(--gold); border:1px solid rgba(251,191,36,0.40); }
+  .badge-completed{ background:rgba(52,211,153,0.18); color:#6ee7b7; border:1px solid rgba(52,211,153,0.40); }
+
+  /* ============ TABLES ============ */
+  .table-row{ transition:background .15s ease; }
+  .table-row:hover{ background:rgba(59,130,246,0.06); }
+
+  /* ============ SCROLLBAR ============ */
+  ::-webkit-scrollbar{ width:6px; height:6px; }
+  ::-webkit-scrollbar-track{ background:var(--ink); }
+  ::-webkit-scrollbar-thumb{ background:var(--blue-dark); border-radius:4px; }
+
+  /* ============ ADMIN TABS ============ */
+  .admin-tab-btn{
+    color:rgba(224,232,255,0.40);
+    border-bottom:2px solid transparent;
+    transition:all .2s ease;
+  }
+  .admin-tab-btn.active{
+    color:var(--blue-light);
+    border-bottom:2px solid var(--blue);
+  }
+
+
+  /* ============ ROLE PILL (landing) ============ */
+  .role-pill{ transition:all .25s cubic-bezier(0.16,1,0.3,1); }
+  .role-pill:hover{
+    transform:translateY(-6px);
+    border-color:var(--blue-light);
+    box-shadow:0 16px 32px -12px rgba(59,130,246,0.55), 0 0 30px -10px rgba(59,130,246,0.3);
+  }
+
+  /* ============ STEP NUM ============ */
+  .step-num{
+    font-family:'Anton',sans-serif;
+    -webkit-text-stroke:1.5px rgba(59,130,246,0.45);
+    color:transparent;
+  }
+
+  /* ============ ORBIT (cricket ball anim) ============ */
+  .stitch-orbit{
+    position:absolute; inset:0; border-radius:9999px;
+    border:1.5px dashed rgba(251,191,36,0.35);
+    animation:spin 18s linear infinite;
+  }
+  @keyframes spin{ to{transform:rotate(360deg);} }
+
+  /* ============ FILTER BUTTONS ============ */
+  .filter-btn{ transition: all 0.2s ease; }
+  .filter-btn.active{
+    background: var(--blue);
+    color:#fff;
+    border-color:var(--blue);
+    box-shadow: 0 0 16px -4px rgba(59,130,246,0.6);
+  }
+
+  /* Responsive */
+  @media (max-width:420px){
+    .hero-title{ font-size:2.4rem !important; line-height:0.92 !important; }
+  }
+
+
+
+
+</style>
+
+</head>
+
+<body class="min-h-screen">
+
+<!-- ===================== NAV ===================== -->
+<nav class="fixed top-0 left-0 w-full z-50 glass-strong" style="padding-top:env(safe-area-inset-top,0px);">
+  <div class="max-w-6xl mx-auto px-5 py-3.5 flex items-center justify-between">
+    <button onclick="showView('welcome')" class="flex items-center gap-2.5">
+      <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" fill="url(#ballGrad)"/>
+        <path d="M20 4 A16 16 0 0 1 20 36" stroke="#3a0f02" stroke-width="1.4" stroke-dasharray="3 3" fill="none"/>
+        <path d="M20 4 A16 16 0 0 0 20 36" stroke="#3a0f02" stroke-width="1.4" stroke-dasharray="3 3" fill="none"/>
+        <defs><radialGradient id="ballGrad" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#93c5fd"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></radialGradient></defs>
+      </svg>
+      <div class="leading-none text-left">
+        <div class="font-display text-lg tracking-wide text-cream">HPL</div>
+        <div class="text-[9px] font-bold tracking-[0.2em] text-[var(--blue-light)] -mt-0.5">HONGANURU</div>
+      </div>
+    </button>
+    <div class="flex items-center gap-3 sm:gap-5">
+      <button onclick="showView('register')" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-cream/60 hover:text-[var(--blue-light)] transition-colors">Player Reg</button>
+      <button onclick="showView('team-register')" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-cream/60 hover:text-[var(--blue-light)] transition-colors">Team Reg</button>
+      <button onclick="openAdminGate()" class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-cream/35 hover:text-cream transition-colors">Admin</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Real-Time Live Notification Toast Container -->
+<div id="live-toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full"></div>
+
+<!-- reusable stadium/pitch illustration -->
+<template id="stadium-svg-tpl">
+<svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bowlGrad" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#2a1a12"/>
+      <stop offset="100%" stop-color="#140d09"/>
+    </radialGradient>
+    <radialGradient id="fieldGrad" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#4fa236"/>
+      <stop offset="70%" stop-color="#2c6b22"/>
+      <stop offset="100%" stop-color="#164a15"/>
+    </radialGradient>
+    <linearGradient id="pitchGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d9c088"/>
+      <stop offset="100%" stop-color="#b89c63"/>
+    </linearGradient>
+  </defs>
+
+  <ellipse cx="500" cy="290" rx="490" ry="260" fill="url(#bowlGrad)"/>
+  <ellipse cx="500" cy="290" rx="490" ry="260" fill="none" stroke="#3d2717" stroke-width="10"/>
+  <ellipse cx="500" cy="290" rx="430" ry="225" fill="none" stroke="#2a1a10" stroke-width="26" opacity="0.65"/>
+  <ellipse cx="500" cy="290" rx="360" ry="185" fill="none" stroke="#3a2415" stroke-width="18" opacity="0.5"/>
+
+  <!-- field -->
+  <ellipse cx="500" cy="295" rx="300" ry="150" fill="url(#fieldGrad)"/>
+  <!-- mow stripes -->
+  <g opacity="0.16">
+    <ellipse cx="500" cy="295" rx="270" ry="134" fill="none" stroke="#fff" stroke-width="14"/>
+    <ellipse cx="500" cy="295" rx="210" ry="104" fill="none" stroke="#fff" stroke-width="14"/>
+    <ellipse cx="500" cy="295" rx="150" ry="74" fill="none" stroke="#fff" stroke-width="14"/>
+  </g>
+  <!-- boundary rope -->
+  <ellipse cx="500" cy="295" rx="290" ry="144" fill="none" stroke="#fdf6ea" stroke-width="3" opacity="0.5"/>
+
+  <!-- pitch strip -->
+  <rect x="452" y="205" width="96" height="180" rx="4" fill="url(#pitchGrad)"/>
+  <rect x="452" y="205" width="96" height="180" rx="4" fill="none" stroke="#8a6f3f" stroke-width="2" opacity="0.6"/>
+  <line x1="452" y1="235" x2="548" y2="235" stroke="#fdf6ea" stroke-width="2" opacity="0.7"/>
+  <line x1="452" y1="355" x2="548" y2="355" stroke="#fdf6ea" stroke-width="2" opacity="0.7"/>
+  <!-- stumps -->
+  <g opacity="0.9">
+    <rect x="494" y="224" width="3" height="14" fill="#fdf6ea"/>
+    <rect x="500" y="224" width="3" height="14" fill="#fdf6ea"/>
+    <rect x="506" y="224" width="3" height="14" fill="#fdf6ea"/>
+    <rect x="494" y="348" width="3" height="14" fill="#fdf6ea"/>
+    <rect x="500" y="348" width="3" height="14" fill="#fdf6ea"/>
+    <rect x="506" y="348" width="3" height="14" fill="#fdf6ea"/>
+  </g>
+
+  <!-- floodlight towers -->
+  <g id="fl1"><rect x="60" y="60" width="6" height="230" fill="#2a1a10"/><rect x="30" y="10" width="66" height="54" rx="5" fill="#ff8a3d" opacity="0.9"/><g fill="#fff2d8"><circle cx="44" cy="26" r="4.5"/><circle cx="63" cy="26" r="4.5"/><circle cx="82" cy="26" r="4.5"/><circle cx="44" cy="44" r="4.5"/><circle cx="63" cy="44" r="4.5"/><circle cx="82" cy="44" r="4.5"/></g></g>
+  <use href="#fl1" x="850" y="0"/>
+  <g id="fl2"><rect x="60" y="60" width="6" height="230" fill="#2a1a10"/><rect x="30" y="10" width="66" height="54" rx="5" fill="#ff8a3d" opacity="0.9"/><g fill="#fff2d8"><circle cx="44" cy="26" r="4.5"/><circle cx="63" cy="26" r="4.5"/><circle cx="82" cy="26" r="4.5"/><circle cx="44" cy="44" r="4.5"/><circle cx="63" cy="44" r="4.5"/><circle cx="82" cy="44" r="4.5"/></g></g>
+  <use href="#fl2" x="-30" y="230" transform="scale(0.85)" />
+  <use href="#fl2" x="1090" y="270" transform="scale(0.85)"/>
+</svg>
+</template>
+
+<!-- ===================== WELCOME ===================== -->
+<section id="view-welcome" class="view active">
+  <div class="relative bg-stage">
+
+  <!-- ============ HERO ============ -->
+  <div class="relative overflow-hidden" style="min-height:100vh;">
+
+    <!-- Layer 1: Real stadium photo (bottom portion only) -->
+    <div class="hero-scene">
+      <div class="stadium-photo-hero"></div>
+      <div class="hero-dark-sky"></div>
+      <div class="hero-ember-horizon"></div>
+      <div class="hero-scanlines"></div>
+      <!-- Floating particles injected by JS -->
+      <div id="hero-particles" aria-hidden="true"></div>
+    </div>
+
+    <!-- Layer 2: Content -->
+    <div class="relative z-10 flex flex-col min-h-screen">
+
+      <!-- HERO CENTER CONTENT -->
+      <div class="flex-1 flex items-center pt-24">
+        <div class="max-w-6xl mx-auto w-full px-6 py-10">
+          <div class="max-w-2xl">
+
+            <!-- Season badge -->
+            <div id="hero-badge" class="animate-fade-up inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-5"
+              style="background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.50); box-shadow:0 0 18px -4px rgba(59,130,246,0.4);">
+              <span class="w-2 h-2 rounded-full bg-[var(--blue)] animate-pulse"></span>
+              <span class="text-[11px] font-extrabold tracking-[0.25em] text-[var(--blue-light)] uppercase">Season 2 &middot; Registrations Open</span>
+            </div>
+
+            <!-- Main heading with text-panel backing -->
+            <div class="hero-text-panel p-6 sm:p-8 mb-6 animate-fade-up delay-100">
+              <h1 id="hero-title" class="hero-title font-display text-5xl sm:text-6xl md:text-[5.5rem] leading-[0.90] uppercase text-white hero-title-shadow">
+                Honganuru<br>
+                <span class="gradient-text">Premier League</span>
+              </h1>
+              <p id="hero-sub" class="mt-5 text-cream/80 text-sm sm:text-base max-w-lg font-medium leading-relaxed hero-sub-shadow">
+                Step up to the crease. Register yourself &amp; your team for Season 2 &mdash; batters, bowlers, keepers, all-rounders welcome.
+              </p>
+            </div>
+
+            <!-- CTAs — Player & Team Registration -->
+            <div id="hero-cta" class="animate-fade-up delay-200 flex flex-wrap gap-3 mb-8">
+              <button onclick="showView('register')" class="btn-ember font-extrabold text-sm uppercase tracking-[0.15em] px-7 py-3.5 rounded-xl flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-5.33 0-8 2.67-8 4v1h16v-1c0-1.33-2.67-4-8-4z"/></svg>
+                Register Player
+              </button>
+              <button onclick="showView('team-register')" class="btn-ghost font-extrabold text-sm uppercase tracking-[0.15em] px-7 py-3.5 rounded-xl flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                Register Team
+              </button>
+            </div>
+
+            <!-- Stat bar -->
+            <div class="animate-fade-up delay-300 flex items-center gap-5 sm:gap-8">
+              <div class="text-center">
+                <div class="font-display text-2xl sm:text-3xl text-cream hero-title-shadow" id="hero-stat-teams">4</div>
+                <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/45 mt-0.5">Teams</div>
+              </div>
+              <div class="stat-sep"></div>
+              <div class="text-center">
+                <div class="font-display text-2xl sm:text-3xl text-cream hero-title-shadow" id="hero-stat-players">0</div>
+                <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/45 mt-0.5">Players</div>
+              </div>
+              <div class="stat-sep"></div>
+              <div class="text-center">
+                <div class="font-display text-2xl sm:text-3xl text-[var(--gold)] hero-title-shadow">T20</div>
+                <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/45 mt-0.5">Format</div>
+              </div>
+              <div class="stat-sep"></div>
+              <div class="text-center">
+                <div class="font-display text-2xl sm:text-3xl text-[var(--blue-light)] hero-title-shadow">Free</div>
+                <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/45 mt-0.5">To Join</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marquee ticker at the very bottom of hero -->
+      <div class="glass-strong border-x-0 border-b-0 py-3 marquee-mask overflow-hidden">
+        <div class="marquee-track">
+          <span class="ticker-set flex items-center gap-8 pr-8"></span>
+          <span class="ticker-set flex items-center gap-8 pr-8"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /HERO -->
+
+    <!-- STEP PROGRESSION CARDS -->
+    <div class="relative z-10 max-w-6xl mx-auto px-6 py-16">
+      <div class="text-center mb-10">
+        <span class="text-[10px] font-extrabold uppercase tracking-[0.3em] text-[var(--blue-light)]">Tournament Roadmap</span>
+        <h2 class="font-display text-3xl sm:text-4xl uppercase text-white mt-2">Registration To <span class="gradient-text">Victory</span></h2>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
+        <div class="glass rounded-2xl p-6 border-l-4 border-l-[var(--blue)] hover:border-l-[var(--blue-light)] transition-colors"
+          style="box-shadow:0 0 0 1px rgba(59,130,246,0.10) inset, 0 8px 28px -8px rgba(0,0,0,0.8), 0 0 30px -12px rgba(59,130,246,0.25);">
+          <div class="step-num text-4xl mb-2">01</div>
+          <h3 class="font-display text-xl uppercase text-white mb-1">Player Registration</h3>
+          <p class="text-cream/50 text-xs font-medium leading-relaxed mb-4">Enter player name, mobile, and choose role (batter, bowler, keeper, all-rounder).</p>
+          <button onclick="showView('register')" class="text-xs font-bold text-[var(--blue-light)] hover:underline uppercase tracking-wider">Register Player &rarr;</button>
+        </div>
+        <div class="glass rounded-2xl p-6 border-l-4 border-l-[var(--gold)] transition-colors"
+          style="box-shadow:0 0 0 1px rgba(251,191,36,0.10) inset, 0 8px 28px -8px rgba(0,0,0,0.8), 0 0 30px -12px rgba(251,191,36,0.20);">
+          <div class="step-num text-4xl mb-2">02</div>
+          <h3 class="font-display text-xl uppercase text-white mb-1">Team Registration</h3>
+          <p class="text-cream/50 text-xs font-medium leading-relaxed mb-4">Register your team, assign captain, home ground, and team squad members.</p>
+          <button onclick="showView('team-register')" class="text-xs font-bold text-[var(--gold)] hover:underline uppercase tracking-wider">Register Team &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROLES PREVIEW -->
+    <div id="roles-section" class="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+      <div class="text-center mb-10">
+        <span class="text-[10px] font-extrabold uppercase tracking-[0.3em] text-[var(--blue-light)]">Pick Your Game</span>
+        <h2 class="font-display text-3xl sm:text-4xl uppercase text-white mt-2">Choose Your <span class="gradient-text">Role</span></h2>
+      </div>
+      <div id="role-preview-grid" class="grid grid-cols-2 sm:grid-cols-5 gap-4"></div>
+    </div>
+
+    <!-- CLOSING CTA -->
+    <div class="relative z-10 max-w-4xl mx-auto px-6 pb-24 text-center">
+      <div class="glass-strong rounded-3xl px-8 py-14 relative overflow-hidden">
+        <div class="relative">
+          <h2 class="font-display text-3xl sm:text-5xl uppercase text-white mb-4">Ready To <span class="gradient-text">Play?</span></h2>
+          <p class="text-cream/55 text-sm sm:text-base font-medium mb-8 max-w-md mx-auto">Squads are filling up fast. Secure your place in Honganuru Premier League Season 2 today.</p>
+          <div class="flex flex-wrap items-center justify-center gap-4">
+            <button onclick="showView('register')" class="btn-ember font-extrabold text-sm uppercase tracking-[0.15em] px-8 py-4 rounded-xl">
+              Register Player Now
+            </button>
+            <button onclick="showView('team-register')" class="btn-ghost font-extrabold text-sm uppercase tracking-[0.15em] px-8 py-4 rounded-xl">
+              Register Team
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== PLAYER REGISTRATION ===================== -->
+<section id="view-register" class="view">
+  <div class="relative min-h-screen bg-stage flex items-center justify-center px-4 py-28 overflow-hidden">
+    <div class="stadium-wrap opacity-25" style="height:55vh;"><div class="stadium-3d" id="stadium-reg"></div></div>
+
+    <div class="relative z-10 w-full max-w-lg" style="perspective:1200px;">
+      <div id="reg-card" class="card-texture border border-[var(--line)] rounded-2xl p-6 sm:p-9 backdrop-blur-sm tilt" style="transform-style:preserve-3d;">
+
+        <div class="text-center mb-7">
+          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-[var(--ember)]/12 border border-[var(--ember)]/30 flex items-center justify-center">
+            <svg width="26" height="26" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="url(#ballGrad2)"/><path d="M10 1 A9 9 0 0 1 10 19" stroke="#1d4ed8" stroke-width="0.9" stroke-dasharray="2 2" fill="none"/><defs><radialGradient id="ballGrad2" cx="35%" cy="30%" r="75%"><stop offset="0%" stop-color="#93c5fd"/><stop offset="55%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></radialGradient></defs></svg>
+          </div>
+          <div class="inline-block text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--ember-light)] bg-[var(--ember)]/15 px-3 py-1 rounded-full mb-2">Step 1 of 2</div>
+          <h1 class="font-display text-3xl sm:text-4xl uppercase text-cream tracking-wide">Player Registration</h1>
+          <p class="text-cream/45 text-sm font-medium mt-1.5">Honganuru Premier League &mdash; Season 2</p>
+        </div>
+
+        <div id="reg-error" class="hidden mb-5 rounded-lg border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm font-semibold text-red-300"></div>
+
+        <form id="reg-form" class="space-y-5" onsubmit="return handleRegister(event)">
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-2">Full Name</label>
+            <input id="f-name" type="text" required placeholder="Enter your full name"
+              class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-2">Mobile Number</label>
+            <input id="f-mobile" type="tel" required inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit mobile number"
+              class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-3">Select Your Role</label>
+            <div id="role-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+            <input type="hidden" id="f-role" required>
+          </div>
+
+          <button type="submit" id="reg-submit" class="btn-ember w-full font-extrabold text-sm uppercase tracking-[0.15em] px-6 py-4 rounded-lg mt-2" disabled>
+            Complete Player Registration
+          </button>
+
+          <div class="flex items-center justify-between pt-2">
+            <button type="button" onclick="showView('team-register')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--gold)] hover:underline">
+              Register A Team Instead &rarr;
+            </button>
+            <button type="button" onclick="showView('welcome')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-cream/35 hover:text-cream/70 transition-colors">
+              &larr; Back
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PLAYER SUCCESS ===================== -->
+<section id="view-success" class="view">
+  <div class="relative min-h-screen bg-stage flex items-center justify-center px-6 overflow-hidden">
+    <div class="stadium-wrap opacity-20" style="height:55vh;"><div class="stadium-3d" id="stadium-success"></div></div>
+    <div class="relative z-10 text-center max-w-md">
+      <div id="success-icon" class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:radial-gradient(circle, rgba(61,138,46,0.28), rgba(61,138,46,0.05)); border:2px solid rgba(143,224,122,0.5);">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8fe07a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="inline-block text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full mb-3">Player Registered</div>
+      <h1 class="font-display text-4xl sm:text-5xl uppercase text-cream mb-3">Registration<br>Successful!</h1>
+      <p id="player-success-msg" class="text-cream/60 text-sm font-medium leading-relaxed mb-6">
+        You are officially registered for Honganuru Premier League &ndash; Season 2!
+      </p>
+
+      <!-- Next Step Card: Team Registration -->
+      <div class="card-texture border border-[var(--ember)]/40 rounded-2xl p-5 mb-6 text-left shadow-lg">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="w-2 h-2 rounded-full bg-[var(--ember)] animate-pulse"></span>
+          <span class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--ember-light)]">Recommended Next Step</span>
+        </div>
+        <h3 class="font-display text-lg uppercase text-cream mb-1">Register Your Team &amp; Squad</h3>
+        <p class="text-cream/50 text-xs font-medium mb-4">Enter your team details and squad to compete in Honganuru Premier League Season 2!</p>
+        <button onclick="goToTeamRegisterFromPlayer()" class="btn-ember w-full font-extrabold text-xs uppercase tracking-[0.15em] px-6 py-3.5 rounded-lg flex items-center justify-center gap-2">
+          <span>Register Team Now</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m0 0l-6-6m6 6l-6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button onclick="resetAndShow('register')" class="btn-ember font-extrabold text-xs uppercase tracking-[0.15em] px-6 py-3 rounded-lg w-full sm:w-auto">
+          + Register Another Player
+        </button>
+        <button onclick="showView('welcome')" class="glass text-[11px] font-bold uppercase tracking-[0.15em] text-cream/60 hover:text-cream transition-colors px-6 py-3 rounded-lg w-full sm:w-auto">
+          &larr; Back to Home
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEAM REGISTRATION ===================== -->
+<section id="view-team-register" class="view">
+  <div class="relative min-h-screen bg-stage flex items-center justify-center px-4 py-28 overflow-hidden">
+    <div class="stadium-wrap opacity-25" style="height:55vh;"><div class="stadium-3d" id="stadium-team"></div></div>
+
+    <div class="relative z-10 w-full max-w-lg" style="perspective:1200px;">
+      <div id="team-card" class="card-texture border border-[var(--line)] rounded-2xl p-6 sm:p-9 backdrop-blur-sm tilt" style="transform-style:preserve-3d;">
+
+        <div class="text-center mb-7">
+          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-[var(--ember)]/12 border border-[var(--ember)]/30 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff8a3d" stroke-width="2"><path d="M12 15a6 6 0 0 0 6-6V4H6v5a6 6 0 0 0 6 6z"/><path d="M6 5H3v2a3 3 0 0 0 3 3M18 5h3v2a3 3 0 0 1-3 3M12 15v3m-4 3h8"/></svg>
+          </div>
+          <div class="inline-block text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--gold)] bg-[var(--gold)]/10 border border-[var(--gold)]/20 px-3 py-1 rounded-full mb-2">Step 2 of 2</div>
+          <h1 class="font-display text-3xl sm:text-4xl uppercase text-cream tracking-wide">Team Registration</h1>
+          <p class="text-cream/45 text-sm font-medium mt-1.5">Honganuru Premier League &mdash; Season 2</p>
+        </div>
+
+        <div id="team-error" class="hidden mb-5 rounded-lg border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm font-semibold text-red-300"></div>
+
+        <form id="team-form" class="space-y-4" onsubmit="return handleTeamRegister(event)">
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Team Name</label>
+            <input id="t-name" type="text" required placeholder="e.g. Honganuru Strikers"
+              class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Captain Name</label>
+              <input id="t-captain" type="text" required placeholder="Captain full name"
+                class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Captain Mobile Number</label>
+              <input id="t-mobile" type="tel" required maxlength="10" placeholder="10-digit number"
+                class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25 font-mono">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Home Ground / Area</label>
+            <input id="t-ground" type="text" required placeholder="e.g. Honganuru Central Ground"
+              class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium placeholder:text-cream/25">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-extrabold uppercase tracking-[0.15em] text-cream/50 mb-1.5">Squad Players (Comma-separated)</label>
+            <textarea id="t-players" rows="3" placeholder="Enter player names separated by comma (e.g. Darshan, Rahul, Kiran, Puneeth...)"
+              class="field-input w-full rounded-lg px-4 py-2.5 text-cream text-sm font-medium placeholder:text-cream/25"></textarea>
+          </div>
+
+          <button type="submit" id="team-submit" class="btn-ember w-full font-extrabold text-sm uppercase tracking-[0.15em] px-6 py-4 rounded-lg mt-2">
+            Register Team &rarr;
+          </button>
+
+          <div class="text-center pt-2">
+            <button type="button" onclick="showView('welcome')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-cream/35 hover:text-cream/70 transition-colors">
+              &larr; Back to Home
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEAM SUCCESS ===================== -->
+<section id="view-team-success" class="view">
+  <div class="relative min-h-screen bg-stage flex items-center justify-center px-6 overflow-hidden">
+    <div class="stadium-wrap opacity-20" style="height:55vh;"><div class="stadium-3d" id="stadium-team-success"></div></div>
+    <div class="relative z-10 text-center max-w-md">
+      <div id="team-success-icon" class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:radial-gradient(circle, rgba(61,138,46,0.28), rgba(61,138,46,0.05)); border:2px solid rgba(143,224,122,0.5);">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8fe07a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="inline-block text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full mb-3">Team Confirmed</div>
+      <h1 class="font-display text-4xl sm:text-5xl uppercase text-cream mb-3">Team<br>Registered!</h1>
+      <p id="team-success-msg" class="text-cream/60 text-sm font-medium leading-relaxed mb-8">
+        Your team is officially enrolled in Honganuru Premier League &ndash; Season 2!
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button onclick="showView('welcome')" class="btn-ember w-full sm:w-auto font-extrabold text-xs uppercase tracking-[0.15em] px-8 py-3.5 rounded-lg">
+          &larr; Back to Home
+        </button>
+        <button onclick="showView('register')" class="glass text-[11px] font-bold uppercase tracking-[0.15em] text-cream/60 hover:text-cream transition-colors px-6 py-3.5 rounded-lg w-full sm:w-auto">
+          + Register Another Player
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ADMIN GATE ===================== -->
+<section id="view-admin-gate" class="view">
+  <div class="relative min-h-screen bg-stage flex items-center justify-center px-4 overflow-hidden">
+    <div class="relative z-10 w-full max-w-sm">
+      <div class="card-texture border border-[var(--line)] rounded-2xl p-8 text-center">
+        <div class="w-12 h-12 mx-auto mb-5 rounded-full bg-[var(--ember)]/12 border border-[var(--ember)]/30 flex items-center justify-center">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff8a3d" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
+        <h2 class="font-display text-2xl uppercase text-cream tracking-wide mb-1">Admin Access</h2>
+        <p class="text-cream/40 text-xs font-medium mb-6">Enter PIN to manage HPL Tournament</p>
+        <form onsubmit="return handleAdminLogin(event)">
+          <input id="admin-pin" type="password" placeholder="Enter admin PIN"
+            class="field-input w-full rounded-lg px-4 py-3 text-cream text-sm font-medium text-center tracking-[0.3em] placeholder:tracking-normal placeholder:text-cream/25 mb-4">
+          <div id="admin-error" class="hidden text-xs font-bold text-red-300 mb-4">Incorrect PIN. Try again.</div>
+          <button type="submit" class="btn-ember w-full font-extrabold text-sm uppercase tracking-[0.15em] px-6 py-3.5 rounded-lg">Enter Dashboard</button>
+        </form>
+        <button onclick="showView('welcome')" class="mt-5 text-[11px] font-bold uppercase tracking-[0.2em] text-cream/35 hover:text-cream/70 transition-colors">&larr; Back to Home</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ADMIN DASHBOARD ===================== -->
+<section id="view-admin" class="view">
+  <div class="min-h-screen bg-stage pt-24 pb-16 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-2 h-2 rounded-full bg-[var(--pitch-light)] animate-pulse"></span>
+            <span class="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[var(--ember-light)]">Tournament Control</span>
+          </div>
+          <h1 class="font-display text-3xl sm:text-4xl uppercase text-cream tracking-wide">HPL Season 2 &ndash; Management</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="showView('welcome')" class="text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--blue-light)] border border-[var(--blue)]/30 rounded-lg px-3.5 py-2 hover:bg-[var(--blue)]/10 transition-colors">Home Page</button>
+          <button onclick="logoutAdmin()" class="text-[11px] font-bold uppercase tracking-[0.2em] text-cream/40 hover:text-red-300 border border-[var(--line)] rounded-lg px-4 py-2 transition-colors">Logout</button>
+        </div>
+      </div>
+
+      <!-- tabs -->
+      <div class="flex items-center gap-2 mb-8 border-b border-[var(--line)]">
+        <button id="tab-btn-players" onclick="switchAdminTab('players')" class="admin-tab-btn active px-4 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em]">Players</button>
+        <button id="tab-btn-teams" onclick="switchAdminTab('teams')" class="admin-tab-btn px-4 py-3 text-[11px] font-extrabold uppercase tracking-[0.15em]">Teams</button>
+      </div>
+
+      <!-- ===== TAB: PLAYERS ===== -->
+      <div id="admin-tab-players" class="admin-tab">
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-8" style="perspective:1000px;">
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4 col-span-2 sm:col-span-1">
+            <div class="font-display text-3xl text-cream" id="stat-total">0</div>
+            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Total Players</div>
+          </div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
+            <div class="font-display text-3xl text-blue-300" id="stat-batter">0</div>
+            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Batters</div>
+          </div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
+            <div class="font-display text-3xl" style="color:var(--ember-light);" id="stat-bowler">0</div>
+            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Bowlers</div>
+          </div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
+            <div class="font-display text-3xl" style="color:#8fe07a;" id="stat-keeper">0</div>
+            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Keepers</div>
+          </div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
+            <div class="font-display text-3xl" style="color:var(--gold);" id="stat-allrounder">0</div>
+            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">All-Rounders</div>
+          </div>
+          <div class="stat-card tilt card-texture border border-[var(--line)] rounded-xl p-4">
+            <div class="font-display text-3xl text-purple-300" id="stat-extra">0</div>
+            <div class="text-[9px] font-extrabold uppercase tracking-[0.15em] text-cream/40 mt-1">Extra Players</div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <input id="admin-search" oninput="renderTable()" type="text" placeholder="Search by name or mobile..."
+            class="field-input rounded-lg px-4 py-2.5 text-sm text-cream w-full max-w-xs placeholder:text-cream/25">
+        </div>
+
+        <!-- table (desktop) -->
+        <div class="hidden md:block card-texture border border-[var(--line)] rounded-2xl overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-[var(--line)] text-left">
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Player Name</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Mobile Number</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Role</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Registration Date</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+          </table>
+          <div id="admin-empty" class="hidden text-center py-14 text-cream/30 text-sm font-medium">No players registered yet.</div>
+        </div>
+
+        <!-- cards (mobile) -->
+        <div id="admin-cards" class="md:hidden space-y-3"></div>
+        <div id="admin-empty-mobile" class="hidden text-center py-14 text-cream/30 text-sm font-medium">No players registered yet.</div>
+      </div>
+
+      <!-- ===== TAB: TEAMS ===== -->
+      <div id="admin-tab-teams" class="admin-tab hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+          <div class="font-display text-2xl text-cream" id="teams-total-label">0 Teams Registered</div>
+          <input id="admin-teams-search" oninput="renderTeamsAdmin()" type="text" placeholder="Search team, captain, or ground..."
+            class="field-input rounded-lg px-4 py-2.5 text-sm text-cream w-full max-w-xs placeholder:text-cream/25">
+        </div>
+        <div class="hidden md:block card-texture border border-[var(--line)] rounded-2xl overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-[var(--line)] text-left">
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Team Name</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Captain</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Mobile</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Home Ground</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Squad Size</th>
+                <th class="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.15em] text-cream/40">Registered</th>
+              </tr>
+            </thead>
+            <tbody id="admin-teams-body"></tbody>
+          </table>
+          <div id="teams-empty" class="hidden text-center py-14 text-cream/30 text-sm font-medium">No teams registered yet.</div>
+        </div>
+        <div id="admin-teams-cards" class="md:hidden space-y-3"></div>
+        <div id="teams-empty-mobile" class="hidden text-center py-14 text-cream/30 text-sm font-medium">No teams registered yet.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const ROLES = [
+    { id:'batter', label:'Batter', icon:'🏏', badge:'badge-batter' },
+    { id:'bowler', label:'Bowler', icon:'🏏', badge:'badge-bowler' },
+    { id:'keeper', label:'Wicket-Keeper', icon:'🧤', badge:'badge-keeper' },
+    { id:'allrounder', label:'All-Rounder', icon:'⭐', badge:'badge-allrounder' },
+    { id:'extra', label:'Extra Player', icon:'👤', badge:'badge-extra' },
+  ];
+  const ADMIN_PIN = "HPL2026";
+  const STORAGE_KEY_PLAYERS = "hpl_season2_players";
+  const STORAGE_KEY_TEAMS = "hpl_season2_teams";
+
+  let currentView = 'welcome';
+  let lastRegisteredPlayer = null;
+
+  // ---------- REST API Client with Offline / LocalStorage Fallback ----------
+  const API = {
+    async getPlayers(query = '') {
+      try {
+        const res = await fetch('/api/players' + (query ? '?q=' + encodeURIComponent(query) : ''));
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem(STORAGE_KEY_PLAYERS, JSON.stringify(data));
+          return data;
+        }
+      } catch (e) { /* offline fallback */ }
+      try {
+        let list = JSON.parse(localStorage.getItem(STORAGE_KEY_PLAYERS)) || [];
+        if (query) {
+          const q = query.toLowerCase();
+          list = list.filter(p => (p.name && p.name.toLowerCase().includes(q)) || (p.mobile && p.mobile.includes(q)));
+        }
+        return list;
+      } catch (e) { return []; }
+    },
+
+    async registerPlayer(player) {
+      try {
+        const res = await fetch('/api/players', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(player)
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'Registration failed');
+        return json;
+      } catch (err) {
+        if (err.message && err.message.includes('already registered')) throw err;
+        // Offline fallback
+        const players = JSON.parse(localStorage.getItem(STORAGE_KEY_PLAYERS) || '[]');
+        if (players.find(p => p.mobile === player.mobile)) {
+          throw new Error('You have already registered for Honganuru Premier League – Season 2.');
+        }
+        const newP = { ...player, id: 'p-' + Date.now(), registeredAt: new Date().toISOString() };
+        players.push(newP);
+        localStorage.setItem(STORAGE_KEY_PLAYERS, JSON.stringify(players));
+        return { success: true, player: newP };
+      }
+    },
+
+    async getTeams(query = '') {
+      try {
+        const res = await fetch('/api/teams' + (query ? '?q=' + encodeURIComponent(query) : ''));
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem(STORAGE_KEY_TEAMS, JSON.stringify(data));
+          return data;
+        }
+      } catch (e) { /* offline fallback */ }
+      try {
+        let list = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS)) || [];
+        if (query) {
+          const q = query.toLowerCase();
+          list = list.filter(t =>
+            (t.name && t.name.toLowerCase().includes(q)) ||
+            (t.captain && t.captain.toLowerCase().includes(q)) ||
+            (t.mobile && t.mobile.includes(q)) ||
+            (t.ground && t.ground.toLowerCase().includes(q))
+          );
+        }
+        return list;
+      } catch (e) { return []; }
+    },
+
+    async registerTeam(team) {
+      try {
+        const res = await fetch('/api/teams', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(team)
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'Team registration failed');
+        return json;
+      } catch (err) {
+        if (err.message && err.message.includes('already been registered')) throw err;
+        const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+        if (teams.find(t => t.name.toLowerCase() === team.name.toLowerCase())) {
+          throw new Error('A team with this name has already been registered.');
+        }
+        const newT = { ...team, id: 't-' + Date.now(), registeredAt: new Date().toISOString() };
+        teams.push(newT);
+        localStorage.setItem(STORAGE_KEY_TEAMS, JSON.stringify(teams));
+        return { success: true, team: newT };
+      }
+    },
+
+    async getStats() {
+      try {
+        const res = await fetch('/api/stats');
+        if (res.ok) return await res.json();
+      } catch (e) { /* fallback */ }
+      const players = JSON.parse(localStorage.getItem(STORAGE_KEY_PLAYERS) || '[]');
+      const teams = JSON.parse(localStorage.getItem(STORAGE_KEY_TEAMS) || '[]');
+      return {
+        totalPlayers: players.length,
+        totalTeams: teams.length,
+        roles: {
+          batter: players.filter(p => p.role === 'batter').length,
+          bowler: players.filter(p => p.role === 'bowler').length,
+          keeper: players.filter(p => p.role === 'keeper').length,
+          allrounder: players.filter(p => p.role === 'allrounder').length,
+          extra: players.filter(p => p.role === 'extra').length,
+        }
+      };
+    }
+  };
+
+  let latestStats = null;
+
+  // ---------- toast notifications ----------
+  function showToast(message, title = 'Live Tournament Event') {
+    const container = document.getElementById('live-toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'pointer-events-auto glass-strong border border-[var(--blue)]/40 rounded-xl p-3.5 shadow-2xl flex items-start gap-3 transform translate-y-2 opacity-0 transition-all duration-300';
+    toast.style.boxShadow = '0 10px 30px -5px rgba(0,0,0,0.8), 0 0 20px -4px rgba(59,130,246,0.35)';
+
+    toast.innerHTML = `
+      <div class="w-8 h-8 rounded-lg bg-[var(--blue)]/20 border border-[var(--blue)]/40 flex items-center justify-center shrink-0 text-base">
+        🏏
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="text-[10px] font-extrabold uppercase tracking-widest text-[var(--blue-light)]">${escapeHtml(title)}</div>
+        <div class="text-xs font-bold text-cream mt-0.5 leading-snug">${escapeHtml(message)}</div>
+      </div>
+    `;
+
+    container.appendChild(toast);
+    requestAnimationFrame(() => {
+      toast.classList.remove('translate-y-2', 'opacity-0');
+    });
+
+    setTimeout(() => {
+      toast.classList.add('opacity-0', 'translate-x-4');
+      setTimeout(() => toast.remove(), 350);
+    }, 4500);
+  }
+
+  // ---------- marquee ticker (live registration driven) ----------
+  function renderTicker(){
+    const items = [];
+
+    if (latestStats) {
+      items.push(`⚡ ${latestStats.totalPlayers || 0} PLAYERS REGISTERED`);
+      items.push(`🛡️ ${latestStats.totalTeams || 0} TEAMS ENROLLED`);
+      if (latestStats.roles) {
+        items.push(`🏏 ${latestStats.roles.batter || 0} BATTERS`);
+        items.push(`🎯 ${latestStats.roles.bowler || 0} BOWLERS`);
+        items.push(`⭐ ${latestStats.roles.allrounder || 0} ALL-ROUNDERS`);
+      }
+    } else {
+      items.push(`⚡ PLAYER & TEAM REGISTRATION OPEN`);
+    }
+    items.push(`🏆 HONGANURU PREMIER LEAGUE &bull; SEASON 2`);
+    items.push(`📍 HONGANURU CENTRAL STADIUM`);
+    items.push(`🎟️ REGISTER TODAY &bull; BECOME A CHAMPION`);
+
+    const html = items.map(t => `
+      <span class="flex items-center gap-3 font-display text-lg sm:text-xl uppercase text-cream/80 tracking-wide">
+        <span>${t}</span>
+        <span class="w-2 h-2 rounded-full bg-[var(--blue-light)] shrink-0"></span>
+      </span>`).join('');
+
+    document.querySelectorAll('.ticker-set').forEach(el => el.innerHTML = html);
+  }
+
+  // ---------- role preview with live player counts ----------
+  function renderRolePreview(stats){
+    const grid = document.getElementById('role-preview-grid');
+    if(!grid) return;
+    const currentStats = stats || latestStats;
+    const rolesData = (currentStats && currentStats.roles) ? currentStats.roles : {};
+
+    grid.innerHTML = ROLES.map(r => {
+      const count = rolesData[r.id] !== undefined ? rolesData[r.id] : 0;
+      return `
+        <button type="button" onclick="goRegisterWithRole('${r.id}')"
+          class="role-pill glass rounded-2xl py-5 px-3 flex flex-col items-center gap-1.5 text-center group hover:border-[var(--blue-light)] transition-all">
+          <span class="text-2xl transform group-hover:scale-110 transition-transform">${r.icon}</span>
+          <span class="text-xs font-bold text-cream/90 leading-tight">${r.label}</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-[var(--blue-light)] bg-[var(--blue)]/15 border border-[var(--blue)]/30 px-2.5 py-0.5 rounded-full mt-1">
+            ${count} Registered
+          </span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  function updateStatsUI(stats) {
+    if (!stats) return;
+    latestStats = stats;
+
+    const elPlayers = document.getElementById('hero-stat-players');
+    if (elPlayers) animateCounter(elPlayers, stats.totalPlayers || 0);
+
+    const elTeams = document.getElementById('hero-stat-teams');
+    if (elTeams) animateCounter(elTeams, stats.totalTeams || 0);
+
+    renderRolePreview(stats);
+  }
+
+  async function refreshHeroStats() {
+    try {
+      const stats = await API.getStats();
+      updateStatsUI(stats);
+      renderTicker();
+    } catch(e) {}
+  }
+
+  // ---------- inject stadium SVGs (background views only, not hero) ----------
+  function injectStadiums(){
+    const tpl = document.getElementById('stadium-svg-tpl').innerHTML;
+    // hero now uses real photo; inject SVG only for non-hero placeholder containers
+    ['stadium-reg','stadium-success','stadium-team','stadium-team-success'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = tpl;
+    });
+  }
+  function goRegisterWithRole(id){
+    showView('register');
+    setTimeout(()=> selectRole(id), 250);
+  }
+
+  // ---------- view switching ----------
+  function showView(id){
+    currentView = id;
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    const target = document.getElementById('view-'+id);
+    if(target) target.classList.add('active');
+    window.scrollTo({top:0, behavior:'instant'});
+    playEntrance(id);
+
+    if (id === 'admin') {
+      renderAdminStats();
+      renderTable();
+      renderTeamsAdmin();
+    } else if (id === 'welcome') {
+      refreshHeroStats();
+    }
+  }
+
+  function resetAndShow(id){
+    document.getElementById('reg-form').reset();
+    selectedRole = null;
+    renderRoleGrid();
+    validateForm();
+    document.getElementById('reg-error').classList.add('hidden');
+    showView(id);
+  }
+
+  // ---------- GSAP 3D entrance animations ----------
+  function playEntrance(view){
+    if(!window.gsap) return;
+    if(view === 'welcome'){
+      gsap.fromTo('#stadium-hero', {rotateX:78, opacity:0}, {rotateX:0, opacity:0.9, duration:1.4, ease:'power3.out'});
+      gsap.fromTo('#hero-badge', {y:-16, opacity:0}, {y:0, opacity:1, duration:0.6, delay:0.15, ease:'power2.out'});
+      gsap.fromTo('#hero-title', {y:40, opacity:0, rotateX:25}, {y:0, opacity:1, rotateX:0, duration:0.9, delay:0.25, ease:'power3.out'});
+      gsap.fromTo('#hero-sub', {y:20, opacity:0}, {y:0, opacity:1, duration:0.7, delay:0.5, ease:'power2.out'});
+      gsap.fromTo('#hero-cta', {y:20, opacity:0, scale:0.9}, {y:0, opacity:1, scale:1, duration:0.6, delay:0.65, ease:'back.out(1.6)'});
+    }
+    if(view === 'register'){
+      gsap.fromTo('#stadium-reg', {rotateX:78, opacity:0}, {rotateX:0, opacity:0.25, duration:1.2, ease:'power3.out'});
+      gsap.fromTo('#reg-card', {y:40, opacity:0, rotateX:-8}, {y:0, opacity:1, rotateX:0, duration:0.7, ease:'power3.out'});
+    }
+    if(view === 'team-register'){
+      gsap.fromTo('#stadium-team', {rotateX:78, opacity:0}, {rotateX:0, opacity:0.25, duration:1.2, ease:'power3.out'});
+      gsap.fromTo('#team-card', {y:40, opacity:0, rotateX:-8}, {y:0, opacity:1, rotateX:0, duration:0.7, ease:'power3.out'});
+    }
+    if(view === 'success'){
+      gsap.fromTo('#stadium-success', {rotateX:78, opacity:0}, {rotateX:0, opacity:0.2, duration:1.2, ease:'power3.out'});
+      gsap.fromTo('#success-icon', {scale:0, rotate:-90}, {scale:1, rotate:0, duration:0.7, ease:'back.out(2.2)'});
+    }
+    if(view === 'team-success'){
+      gsap.fromTo('#stadium-team-success', {rotateX:78, opacity:0}, {rotateX:0, opacity:0.2, duration:1.2, ease:'power3.out'});
+      gsap.fromTo('#team-success-icon', {scale:0, rotate:-90}, {scale:1, rotate:0, duration:0.7, ease:'back.out(2.2)'});
+    }
+    if(view === 'admin'){
+      gsap.fromTo('.stat-card', {y:24, opacity:0}, {y:0, opacity:1, duration:0.5, stagger:0.06, ease:'power2.out'});
+    }
+  }
+
+  // ---------- 3D pointer tilt ----------
+  function attachTilt(el, intensity){
+    if(!el) return;
+    intensity = intensity || 10;
+    el.addEventListener('mousemove', (e)=>{
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `rotateX(${(-py*intensity).toFixed(2)}deg) rotateY(${(px*intensity).toFixed(2)}deg) translateZ(0)`;
+    });
+    el.addEventListener('mouseleave', ()=>{ el.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
+  }
+  function attachTiltToAll(selector, intensity){
+    document.querySelectorAll(selector).forEach(el=>attachTilt(el, intensity));
+  }
+
+  // ---------- role selection ----------
+  let selectedRole = null;
+  function renderRoleGrid(){
+    const grid = document.getElementById('role-grid');
+    if(!grid) return;
+    grid.innerHTML = ROLES.map(r => `
+      <button type="button" onclick="selectRole('${r.id}')" data-role="${r.id}" style="perspective:600px;"
+        class="role-card tilt ${selectedRole===r.id?'selected':''} relative flex flex-col items-center justify-center gap-1.5 rounded-xl border border-[var(--line)] bg-[rgba(253,246,234,0.03)] py-4 px-2">
+        <span class="role-check absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[var(--ember)] flex items-center justify-center">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff6ec" stroke-width="4"><path d="M20 6L9 17l-5-5"/></svg>
+        </span>
+        <span class="role-emoji text-xl">${r.icon}</span>
+        <span class="role-label text-[11px] font-bold text-cream/80 text-center leading-tight">${r.label}</span>
+      </button>
+    `).join('');
+    attachTiltToAll('#role-grid .role-card', 14);
+  }
+  function selectRole(id){
+    selectedRole = id;
+    document.getElementById('f-role').value = id;
+    renderRoleGrid();
+    validateForm();
+    if(window.gsap){
+      const el = document.querySelector(`#role-grid [data-role="${id}"]`);
+      if(el) gsap.fromTo(el, {scale:0.9}, {scale:1, duration:0.35, ease:'back.out(3)'});
+    }
+  }
+
+  function validateForm(){
+    const name = document.getElementById('f-name')?.value.trim() || '';
+    const mobile = document.getElementById('f-mobile')?.value.trim() || '';
+    const ok = name.length>=2 && /^[0-9]{10}$/.test(mobile) && selectedRole;
+    const btn = document.getElementById('reg-submit');
+    if(btn) btn.disabled = !ok;
+    return ok;
+  }
+
+  // ---------- player registration ----------
+  async function handleRegister(e){
+    e.preventDefault();
+    if(!validateForm()) return false;
+
+    const name = document.getElementById('f-name').value.trim();
+    const mobile = document.getElementById('f-mobile').value.trim();
+    const role = selectedRole;
+    const errBox = document.getElementById('reg-error');
+    const submitBtn = document.getElementById('reg-submit');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Registering...';
+
+    try {
+      await API.registerPlayer({ name, mobile, role });
+      errBox.classList.add('hidden');
+      lastRegisteredPlayer = { name, mobile, role };
+
+      document.getElementById('player-success-msg').textContent =
+        `Welcome ${name}! Your registration for Honganuru Premier League – Season 2 has been completed.`;
+
+      showView('success');
+    } catch (err) {
+      errBox.textContent = err.message || "Failed to register player. Please try again.";
+      errBox.classList.remove('hidden');
+      if(window.gsap) gsap.fromTo('#reg-card', {x:-8}, {x:0, duration:0.4, ease:'elastic.out(1,0.3)'});
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Complete Player Registration';
+    }
+    return false;
+  }
+
+  // Transition from Player Registration Success directly to Team Registration
+  function goToTeamRegisterFromPlayer(){
+    if (lastRegisteredPlayer) {
+      const captInput = document.getElementById('t-captain');
+      const mobInput = document.getElementById('t-mobile');
+      if (captInput) captInput.value = lastRegisteredPlayer.name;
+      if (mobInput) mobInput.value = lastRegisteredPlayer.mobile;
+      const squadArea = document.getElementById('t-players');
+      if (squadArea && !squadArea.value) squadArea.value = lastRegisteredPlayer.name;
+    }
+    showView('team-register');
+  }
+
+  // ---------- team registration ----------
+  async function handleTeamRegister(e){
+    e.preventDefault();
+    const name = document.getElementById('t-name').value.trim();
+    const captain = document.getElementById('t-captain').value.trim();
+    const mobile = document.getElementById('t-mobile').value.trim();
+    const ground = document.getElementById('t-ground').value.trim();
+    const squadRaw = (document.getElementById('t-players')?.value || '').trim();
+    const players = squadRaw ? squadRaw.split(',').map(s => s.trim()).filter(Boolean) : [captain];
+
+    const errBox = document.getElementById('team-error');
+    const submitBtn = document.getElementById('team-submit');
+
+    if(name.length < 2 || captain.length < 2 || !/^[0-9]{10}$/.test(mobile) || ground.length < 2){
+      errBox.textContent = "Please fill all required team details with a valid 10-digit captain mobile.";
+      errBox.classList.remove('hidden');
+      return false;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Registering Team...';
+
+    try {
+      await API.registerTeam({ name, captain, mobile, ground, players });
+      errBox.classList.add('hidden');
+
+      document.getElementById('team-success-msg').textContent =
+        `Team "${name}" led by Captain ${captain} is now officially locked in for Honganuru Premier League – Season 2.`;
+
+      // Reset form
+      document.getElementById('team-form').reset();
+      showView('team-success');
+    } catch(err) {
+      errBox.textContent = err.message || "Failed to register team. Please try again.";
+      errBox.classList.remove('hidden');
+      if(window.gsap) gsap.fromTo('#team-card', {x:-8}, {x:0, duration:0.4, ease:'elastic.out(1,0.3)'});
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Register Team →';
+    }
+    return false;
+  }
+
+  // ---------- Admin Login & Dashboard ----------
+  function openAdminGate(){
+    document.getElementById('admin-pin').value = '';
+    document.getElementById('admin-error').classList.add('hidden');
+    showView('admin-gate');
+  }
+
+  async function handleAdminLogin(e){
+    e.preventDefault();
+    const pin = document.getElementById('admin-pin').value.trim();
+    const errBox = document.getElementById('admin-error');
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        errBox.classList.add('hidden');
+        showView('admin');
+        switchAdminTab('players');
+        return false;
+      }
+    } catch(err) {
+      if (pin === ADMIN_PIN) {
+        errBox.classList.add('hidden');
+        showView('admin');
+        switchAdminTab('players');
+        return false;
+      }
+    }
+
+    if (pin === ADMIN_PIN) {
+      errBox.classList.add('hidden');
+      showView('admin');
+      switchAdminTab('players');
+    } else {
+      errBox.textContent = 'Incorrect PIN. Try again.';
+      errBox.classList.remove('hidden');
+    }
+    return false;
+  }
+
+  function logoutAdmin(){ showView('welcome'); }
+
+  function switchAdminTab(tab){
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
+
+    const activeBtn = document.getElementById(`tab-btn-${tab}`);
+    const activeTab = document.getElementById(`admin-tab-${tab}`);
+    if(activeBtn) activeBtn.classList.add('active');
+    if(activeTab) activeTab.classList.remove('hidden');
+
+    if(tab === 'players') { renderTable(); renderAdminStats(); }
+    else if(tab === 'teams') { renderTeamsAdmin(); }
+  }
+
+  // ---------- Admin Players & Teams Dashboard Data Rendering ----------
+  async function renderAdminStats() {
+    try {
+      const stats = await API.getStats();
+      latestStats = stats;
+      const total = stats.totalPlayers || 0;
+      const roles = stats.roles || {};
+
+      animateCounter(document.getElementById('stat-total'), total);
+      animateCounter(document.getElementById('stat-batter'), roles.batter || 0);
+      animateCounter(document.getElementById('stat-bowler'), roles.bowler || 0);
+      animateCounter(document.getElementById('stat-keeper'), roles.keeper || 0);
+      animateCounter(document.getElementById('stat-allrounder'), roles.allrounder || 0);
+      animateCounter(document.getElementById('stat-extra'), roles.extra || 0);
+    } catch (e) {}
+  }
+
+  async function renderTable() {
+    const tbody = document.getElementById('admin-table-body');
+    const cards = document.getElementById('admin-cards');
+    const empty = document.getElementById('admin-empty');
+    const emptyMobile = document.getElementById('admin-empty-mobile');
+    const query = document.getElementById('admin-search')?.value.trim() || '';
+
+    try {
+      const players = await API.getPlayers(query);
+
+      if (!players || players.length === 0) {
+        if (tbody) tbody.innerHTML = '';
+        if (cards) cards.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
+        if (emptyMobile) emptyMobile.classList.remove('hidden');
+        return;
+      }
+
+      if (empty) empty.classList.add('hidden');
+      if (emptyMobile) emptyMobile.classList.add('hidden');
+
+      if (tbody) {
+        tbody.innerHTML = players.map(p => {
+          const r = roleMeta(p.role);
+          return `
+            <tr class="border-b border-[var(--line)] hover:bg-white/[0.02] transition-colors">
+              <td class="px-6 py-4 font-bold text-cream">${escapeHtml(p.name)}</td>
+              <td class="px-6 py-4 font-mono text-cream/70">${escapeHtml(p.mobile)}</td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold ${r.badge}">
+                  <span>${r.icon}</span>
+                  <span>${r.label}</span>
+                </span>
+              </td>
+              <td class="px-6 py-4 text-xs text-cream/40">${fmtDate(p.registeredAt)}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      if (cards) {
+        cards.innerHTML = players.map(p => {
+          const r = roleMeta(p.role);
+          return `
+            <div class="card-texture border border-[var(--line)] rounded-xl p-4 flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-cream text-base">${escapeHtml(p.name)}</span>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${r.badge}">
+                  ${r.icon} ${r.label}
+                </span>
+              </div>
+              <div class="flex items-center justify-between text-xs text-cream/60">
+                <span class="font-mono">${escapeHtml(p.mobile)}</span>
+                <span>${fmtDate(p.registeredAt)}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    } catch (e) {
+      console.error('Error rendering players table:', e);
+    }
+  }
+
+  async function renderTeamsAdmin() {
+    const tbody = document.getElementById('admin-teams-body');
+    const cards = document.getElementById('admin-teams-cards');
+    const empty = document.getElementById('teams-empty');
+    const emptyMobile = document.getElementById('teams-empty-mobile');
+    const label = document.getElementById('teams-total-label');
+    const query = document.getElementById('admin-teams-search')?.value.trim() || '';
+
+    try {
+      const teams = await API.getTeams(query);
+
+      if (label) {
+        label.textContent = `${teams.length} Team${teams.length === 1 ? '' : 's'} Registered`;
+      }
+
+      if (!teams || teams.length === 0) {
+        if (tbody) tbody.innerHTML = '';
+        if (cards) cards.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
+        if (emptyMobile) emptyMobile.classList.remove('hidden');
+        return;
+      }
+
+      if (empty) empty.classList.add('hidden');
+      if (emptyMobile) emptyMobile.classList.add('hidden');
+
+      if (tbody) {
+        tbody.innerHTML = teams.map(t => {
+          const squad = Array.isArray(t.players) ? t.players : (t.players ? [t.players] : []);
+          return `
+            <tr class="border-b border-[var(--line)] hover:bg-white/[0.02] transition-colors">
+              <td class="px-6 py-4 font-bold text-cream">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[var(--blue-light)]"></span>
+                  <span>${escapeHtml(t.name)}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4 font-bold text-cream/90">${escapeHtml(t.captain)}</td>
+              <td class="px-6 py-4 font-mono text-cream/70">${escapeHtml(t.mobile)}</td>
+              <td class="px-6 py-4 text-cream/70 text-xs">${escapeHtml(t.ground)}</td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-[var(--blue)]/15 border border-[var(--blue)]/30 text-[var(--blue-light)]">
+                  ${squad.length} players
+                </span>
+                ${squad.length > 0 ? `<div class="text-[10px] text-cream/40 mt-1 max-w-xs truncate" title="${escapeHtml(squad.join(', '))}">${escapeHtml(squad.join(', '))}</div>` : ''}
+              </td>
+              <td class="px-6 py-4 text-xs text-cream/40">${fmtDate(t.registeredAt)}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      if (cards) {
+        cards.innerHTML = teams.map(t => {
+          const squad = Array.isArray(t.players) ? t.players : (t.players ? [t.players] : []);
+          return `
+            <div class="card-texture border border-[var(--line)] rounded-xl p-4 flex flex-col gap-2.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-cream text-base">${escapeHtml(t.name)}</span>
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-[var(--blue-light)] bg-[var(--blue)]/15 border border-[var(--blue)]/30 px-2 py-0.5 rounded-full">
+                  ${squad.length} Players
+                </span>
+              </div>
+              <div class="text-xs text-cream/75">
+                <span class="text-cream/40">Captain:</span> <strong class="text-cream">${escapeHtml(t.captain)}</strong> &bull; <span class="font-mono">${escapeHtml(t.mobile)}</span>
+              </div>
+              <div class="text-xs text-cream/60">
+                <span class="text-cream/40">Ground:</span> ${escapeHtml(t.ground)}
+              </div>
+              ${squad.length > 0 ? `
+                <div class="text-[11px] bg-white/[0.03] p-2 rounded border border-white/5 text-cream/60">
+                  <span class="text-cream/40 font-bold block mb-0.5">Squad:</span>
+                  ${escapeHtml(squad.join(', '))}
+                </div>` : ''}
+              <div class="text-[10px] text-cream/35 text-right">Registered: ${fmtDate(t.registeredAt)}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    } catch (e) {
+      console.error('Error rendering teams table:', e);
+    }
+  }
+
+  function roleMeta(id){ return ROLES.find(r=>r.id===id) || {label:id, icon:'', badge:''}; }
+  function fmtDate(iso){
+    if(!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) + ' · ' +
+           d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  // ---- Particle generator ----
+  function spawnParticles(){
+    const container = document.getElementById('hero-particles');
+    if(!container) return;
+    container.innerHTML = '';
+    const count = 18;
+    for(let i=0; i<count; i++){
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random()*3 + 1.5;
+      p.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random()*100}%;
+        bottom:${25 + Math.random()*40}%;
+        animation-duration:${4 + Math.random()*6}s;
+        animation-delay:${Math.random()*5}s;
+        opacity:${0.3 + Math.random()*0.5};
+        background:${Math.random()>0.5 ? 'rgba(251,191,36,0.65)' : 'rgba(96,165,250,0.65)'};
+      `;
+      container.appendChild(p);
+    }
+  }
+
+  // ---- Animated counter ----
+  function animateCounter(el, target, duration=1200){
+    if(!el) return;
+    const start = performance.now();
+    const from = parseInt(el.textContent, 10) || 0;
+    function step(now){
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(from + (target - from) * eased);
+      if(progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ---------- Real-Time Server-Sent Events (SSE) Client ----------
+  const Realtime = {
+    source: null,
+    init() {
+      if (!window.EventSource) {
+        this.startFallbackPolling();
+        return;
+      }
+      try {
+        this.source = new EventSource('/api/events');
+        this.source.addEventListener('connected', () => {
+          this.updateIndicator(true);
+        });
+        this.source.addEventListener('sync', (e) => {
+          try {
+            const payload = JSON.parse(e.data);
+            const d = payload.data || payload;
+            if (d.stats) updateStatsUI(d.stats);
+            renderTicker();
+          } catch(err) {}
+        });
+        this.source.addEventListener('player_registered', (e) => {
+          try {
+            const payload = JSON.parse(e.data);
+            const d = payload.data || payload;
+            if (d.stats) updateStatsUI(d.stats);
+            if (currentView === 'admin') { renderTable(); renderAdminStats(); }
+            renderTicker();
+            if (d.player) {
+              const r = roleMeta(d.player.role);
+              showToast(`${d.player.name} (${r.label}) joined the league!`, 'New Player Registered');
+            }
+          } catch(err) {}
+        });
+        this.source.addEventListener('team_registered', (e) => {
+          try {
+            const payload = JSON.parse(e.data);
+            const d = payload.data || payload;
+            if (d.stats) updateStatsUI(d.stats);
+            if (currentView === 'admin') { renderTeamsAdmin(); renderAdminStats(); }
+            renderTicker();
+            if (d.team) {
+              showToast(`Team "${d.team.name}" led by Capt. ${d.team.captain} enrolled!`, 'New Team Registered');
+            }
+          } catch(err) {}
+        });
+        this.source.onerror = () => {
+          this.updateIndicator(false);
+        };
+      } catch(err) {
+        this.startFallbackPolling();
+      }
+      this.startFallbackPolling();
+    },
+    updateIndicator(isLive) {
+      // Indicator status handled if present
+    },
+    startFallbackPolling() {
+      setInterval(async () => {
+        if (!this.source || this.source.readyState !== EventSource.OPEN) {
+          if (currentView === 'welcome' || currentView === 'admin') {
+            const stats = await API.getStats();
+            updateStatsUI(stats);
+            renderTicker();
+          }
+        }
+      }, 5000);
+    }
+  };
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', ()=>{
+    injectStadiums();
+    renderTicker();
+    renderRolePreview();
+    renderRoleGrid();
+    spawnParticles();
+
+    // Parallax: scroll moves stadium photo upward (parallax depth)
+    let lastScrollY = 0;
+    window.addEventListener('scroll', () => {
+      lastScrollY = window.scrollY;
+      if(currentView === 'welcome'){
+        const hero = document.querySelector('.stadium-photo-hero');
+        if(hero){
+          const shift = lastScrollY * 0.18;
+          hero.style.transform = `translateY(${shift}px)`;
+        }
+      }
+    }, { passive: true });
+
+    attachTilt(document.getElementById('reg-card'), 4);
+    attachTilt(document.getElementById('team-card'), 4);
+
+    document.getElementById('f-name')?.addEventListener('input', validateForm);
+    document.getElementById('f-mobile')?.addEventListener('input', (e)=>{
+      e.target.value = e.target.value.replace(/\D/g,'').slice(0,10);
+      validateForm();
+    });
+    document.getElementById('t-mobile')?.addEventListener('input', (e)=>{
+      e.target.value = e.target.value.replace(/\D/g,'').slice(0,10);
+    });
+
+    refreshHeroStats();
+    Realtime.init();
+    playEntrance('welcome');
+  });
+
+</script>
+</body>
+</html>

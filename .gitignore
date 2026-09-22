@@ -1,0 +1,6 @@
+node_modules/
+.agents/
+*.log
+.vercel/
+.DS_Store
+Thumbs.db
